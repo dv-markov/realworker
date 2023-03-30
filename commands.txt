@@ -1,0 +1,6 @@
+# создать проект в текущей деректории, без поддеректорий
+django-admin startproject tutorial .
+
+# создать приложение в рамках проекта
+django-admin startapp quickstart
+python manage.py startapp quickstart
