@@ -124,13 +124,7 @@ STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATICFILES_DIRS = []
 
-# if DEBUG:
-#     STATICFILES_DIRS = (
-#         BASE_DIR / "static",
-#         # "/home/www/code/realwoker/static/"
-#         # os.path.join(BASE_DIR, 'static'),
-#     )
-# else:
+CSRF_TRUSTED_ORIGINS = ['78.107.195.24']
     
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
