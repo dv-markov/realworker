@@ -18,6 +18,8 @@ from django.contrib import admin
 from django.urls import include, path, re_path
 from rest_framework import routers
 from apps.users import views
+from django.conf import settings
+from django.conf.urls.static import static
 # from apps.users import UserViewSet, GroupViewSet
 
 router = routers.DefaultRouter()
@@ -38,4 +40,5 @@ urlpatterns = [
 
     # url(r'^auth/', include('djoser.urls')),
     # url(r'^auth/', include('djoser.urls.authtoken')),
-]
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
