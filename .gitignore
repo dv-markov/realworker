@@ -145,3 +145,5 @@ GitHub.sublime-settings
 
 #node
 node_modules
+
+/dj-env/
