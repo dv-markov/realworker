@@ -1,7 +1,7 @@
 /src/
 /static/
 /db_realworker.sqbpro
-
+db.sqlite3
 .DS_Store
 
 # Django #
