@@ -1,7 +1,6 @@
 /src/
 /static/
 /db_realworker.sqbpro
-# **/__pycache__/
 
 .DS_Store
 
