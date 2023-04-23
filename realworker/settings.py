@@ -124,7 +124,7 @@ STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATICFILES_DIRS = []
 
-CSRF_TRUSTED_ORIGINS = ['78.107.195.24']
+CSRF_TRUSTED_ORIGINS = ['http://78.107.195.24', 'http://78.107.195.24/admin']
     
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
