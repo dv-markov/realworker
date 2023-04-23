@@ -3,12 +3,13 @@ from django.contrib.auth.models import AbstractUser, Group
 # from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.utils.translation import gettext_lazy as _
 
+
 class CustomUser(AbstractUser):
     # username_validator = UnicodeUsernameValidator()
 
-    fio = models.CharField('ФИО', max_length=255, default='')
+    name = models.CharField('ФИО', max_length=255, default='')
     city = models.CharField('Город', max_length=255, default='')
-    groups = models.ForeignKey(Group, on_delete=models.PROTECT, null=True)
+    role = models.ForeignKey(Group, on_delete=models.PROTECT, null=True)
 
     username = models.CharField(
         "Телефон",
@@ -21,9 +22,4 @@ class CustomUser(AbstractUser):
         },
     )
 
-    role = (
-        ('c', 'Заказчик'),
-        ('w', 'Исполнитель')
-    )
-
-    REQUIRED_FIELDS = ["fio", "city", "groups", "email"]
+    REQUIRED_FIELDS = ["name", "city", "role", "email"]
