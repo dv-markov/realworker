@@ -41,15 +41,15 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'djoser',
-    'apps.users.apps.UsersConfig',  # регистрация приложения users
     'corsheaders',  # corsheaders
- ]
+    'apps.users.apps.UsersConfig',  # регистрация приложения users
+]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware', 
     'corsheaders.middleware.CorsMiddleware',  # corsheaders
+    'django.middleware.common.CommonMiddleware', 
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -158,4 +158,3 @@ REST_FRAMEWORK = {
     ),
 }
 
-# коммент, чтобы проверить гитхаб
