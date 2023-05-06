@@ -157,3 +157,5 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
     ),
 }
+
+# коммент, чтобы проверить гитхаб
