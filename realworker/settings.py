@@ -132,7 +132,7 @@ CSRF_TRUSTED_ORIGINS = ['http://78.107.195.24', 'http://78.107.195.24/admin']
 AUTH_USER_MODEL = 'users.CustomUser'
 
 # corsheaders
-CORS_ALLOW_ALL_ORIGINS = False  # If this is used then `CORS_ALLOWED_ORIGINS` will not have any effect
+# CORS_ALLOW_ALL_ORIGINS = False  # If this is used then `CORS_ALLOWED_ORIGINS` will not have any effect
 # CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
         'http://localhost:3000',
