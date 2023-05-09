@@ -128,6 +128,7 @@ STATICFILES_DIRS = []
 
 CSRF_TRUSTED_ORIGINS = ['http://78.107.195.24',
                         'http://78.107.195.24/admin',
+                        'http://realworker.ru',
                         'http://realworker.ru/admin'
                         ]
 
