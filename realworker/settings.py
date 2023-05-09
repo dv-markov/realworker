@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-mzt%vowj+1t9l4(sh9uyr#6hzrn7qr!%7^vp-t*wds7pmi9ui@
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['78.107.195.24', '127.0.0.1']
+ALLOWED_HOSTS = ['78.107.195.24', '127.0.0.1', 'http://realworker.ru']
 
 
 # Application definition
@@ -126,7 +126,10 @@ STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATICFILES_DIRS = []
 
-CSRF_TRUSTED_ORIGINS = ['http://78.107.195.24', 'http://78.107.195.24/admin']
+CSRF_TRUSTED_ORIGINS = ['http://78.107.195.24',
+                        'http://78.107.195.24/admin',
+                        'http://realworker.ru/admin'
+                        ]
 
 # User
 AUTH_USER_MODEL = 'users.CustomUser'
