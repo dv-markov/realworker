@@ -30,13 +30,13 @@ router.register(r'groups', views.GroupViewSet)
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
 
-    path('admin/', admin.site.urls),
-    path('', include(router.urls)),
-    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    path('api/admin/', admin.site.urls),
+    path('api/', include(router.urls)),
+    path('api/api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 
     # path('api/v1/auth/', include('djoser.urls')),  # djoser
-    re_path(r'^auth/', include('djoser.urls')),  # djoser
-    re_path(r'^auth/', include('djoser.urls.authtoken')),  # djoser
+    re_path(r'^api/auth/', include('djoser.urls')),  # djoser
+    re_path(r'^api/auth/', include('djoser.urls.authtoken')),  # djoser
 
     # url(r'^auth/', include('djoser.urls')),
     # url(r'^auth/', include('djoser.urls.authtoken')),
