@@ -23,3 +23,45 @@ class CustomUser(AbstractUser):
     )
 
     REQUIRED_FIELDS = ["name", "city", "role", "email"]
+
+
+class UserProfile(models.Model):
+    country = models.ForeignKey('Country', on_delete=models.PROTECT, null=True)
+    city = models.ForeignKey('City', on_delete=models.PROTECT, null=True)
+    specializations = models.ManyToManyField('Specialization')
+    qualifications = models.ManyToManyField('Qualification')
+    photo = models.CharField('Photo', max_length=255, default='')
+    company = models.CharField('Company', max_length=255, default='')
+    position = models.CharField('Position', max_length=255, default='')
+    last_active = models.DateTimeField('Last active', auto_now_add=True)
+    messages = models.CharField('Messages', max_length=255, default='')
+    user = models.ForeignKey(CustomUser, on_delete=models.PROTECT, null=True)
+
+    def __str__(self):
+        return self.user.name
+
+
+class Country(models.Model):
+    name = models.CharField(max_length=100, db_index=True)
+
+    def __str__(self):
+        return self.name
+
+
+class City(models.Model):
+    name = models.CharField(max_length=100, db_index=True)
+    country = models.ForeignKey(Country, on_delete=models.PROTECT, null=True)
+
+    def __str__(self):
+        return self.name
+
+
+class Specialization(models.Model):
+    name = models.CharField(max_length=255, db_index=True)
+
+
+class Qualification(models.Model):
+    name = models.CharField(max_length=255, db_index=True)
+
+
+
