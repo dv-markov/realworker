@@ -3,6 +3,7 @@
 /db_realworker.sqbpro
 db.sqlite3
 .DS_Store
+/apps/users/migrations/
 
 # Django #
 *.log
