@@ -27,6 +27,13 @@ class GroupViewSet(viewsets.ModelViewSet):
 
 
 class UserProfileView(generics.ListAPIView):
-    queryset = UserProfile.objects.all()
+    # queryset = UserProfile.objects.all()
     serializer_class = UserProfileSerializer
 
+    def get_queryset(self):
+        current_user = self.request.user
+        print(current_user)
+        return UserProfile.objects.filter(user=current_user)
+        # return UserProfile.objects.get(user__username=current_user)
+
+    permission_classes = [permissions.IsAuthenticated]
