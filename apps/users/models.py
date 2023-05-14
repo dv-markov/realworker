@@ -62,6 +62,3 @@ class Specialization(models.Model):
 
 class Qualification(models.Model):
     name = models.CharField(max_length=255, db_index=True)
-
-
-
