@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/4.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
-import os
+
 from pathlib import Path
 import os
 
@@ -27,8 +27,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['78.107.195.24',
                  '127.0.0.1',
-                 'http://realworker.ru',
-                 'http://realworker.ru/api'
+                 'realworker.ru',
+                 # 'http://realworker.ru/api'
                  ]
 
 # Application definition
