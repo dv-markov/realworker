@@ -17,12 +17,9 @@ def create_user_profile(sender, instance, created, **kwargs):
             user_profile.save()
 
 
-# @receiver(pre_save, sender=CustomUser)
-# def update_last_active(sender, instance, **kwargs):
-#     if instance.is_authenticated:
-#         try:
-#             profile = instance.userprofile
-#         except UserProfile.DoesNotExist:
-#             profile = UserProfile(user=instance)
-#         profile.last_active = timezone.now()
-#         profile.save()
+@receiver(pre_save, sender=CustomUser)
+def update_last_active(sender, instance, **kwargs):
+    if instance.is_authenticated:
+        profile = UserProfile.objects.get(user=instance)
+        profile.last_active = timezone.now()
+        profile.save()
