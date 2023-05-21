@@ -8,7 +8,6 @@ class CustomUser(AbstractUser):
     # username_validator = UnicodeUsernameValidator()
 
     name = models.CharField('ФИО', max_length=255, default='')
-    # city = models.CharField('Город', max_length=255, default='')
     city = models.ForeignKey('City', on_delete=models.PROTECT, null=True)
     role = models.ForeignKey(Group, on_delete=models.PROTECT, null=True)
 
@@ -27,7 +26,6 @@ class CustomUser(AbstractUser):
 
 
 class UserProfile(models.Model):
-    # city = models.ForeignKey('City', on_delete=models.PROTECT, null=True)
     country = models.ForeignKey('Country', on_delete=models.PROTECT, null=True)
     specializations = models.ManyToManyField('Specialization', null=True)
     qualifications = models.ManyToManyField('Qualification', null=True)

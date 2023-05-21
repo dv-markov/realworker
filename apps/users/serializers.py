@@ -35,10 +35,8 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserProfile
-        # fields = '__all__'
         fields = ['user',
                   'country',
-                  # 'city',
                   'specializations',
                   'qualifications',
                   'company',
