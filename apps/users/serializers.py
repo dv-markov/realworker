@@ -15,8 +15,10 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        data['city'] = instance.city.name
-        data['role'] = instance.role.name
+        if data['city']:
+            data['city'] = instance.city.name
+        if data['role']:
+            data['role'] = instance.role.name
         return data
 
 
