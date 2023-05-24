@@ -123,3 +123,4 @@ GitHub.sublime-settings
 
 #node
 node_modules
+/realworker/local_settings.py

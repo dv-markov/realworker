@@ -83,8 +83,12 @@ WSGI_APPLICATION = 'realworker.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'realworker',
+        'USER': 'realworker_user',
+        'PASSWORD': 'realworker777',
+        'HOST': 'localhost',
+        'PORT': '',
     }
 }
 
