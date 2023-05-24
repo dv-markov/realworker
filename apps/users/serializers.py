@@ -41,6 +41,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
                   'country',
                   'specializations',
                   'qualifications',
+                  'photo',
                   'company',
                   'position',
                   'last_active',
