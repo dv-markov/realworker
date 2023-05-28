@@ -27,8 +27,8 @@ class CustomUser(AbstractUser):
 
 class UserProfile(models.Model):
     country = models.ForeignKey('Country', on_delete=models.PROTECT, null=True)
-    specializations = models.ManyToManyField('Specialization', null=True)
-    qualifications = models.ManyToManyField('Qualification', null=True)
+    specializations = models.ManyToManyField('Specialization')  # , null=True)
+    qualifications = models.ManyToManyField('Qualification')  # , null=True)
     photo = models.CharField('Photo', max_length=255, default='')
     company = models.CharField('Company', max_length=255, default='')
     position = models.CharField('Position', max_length=255, default='')
