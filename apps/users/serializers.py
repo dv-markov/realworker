@@ -62,16 +62,15 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
 
 class OrderSerializer(serializers.ModelSerializer):
-    category = serializers.StringRelatedField()
-    specialization = serializers.StringRelatedField()
-    qualification = serializers.StringRelatedField()
+    # category = serializers.StringRelatedField()
+    # specialization = serializers.StringRelatedField()
+    # qualification = serializers.StringRelatedField()
     # address = GeoDataSerializer()
-    address = serializers.StringRelatedField()
     files = serializers.StringRelatedField(many=True)
     chats = serializers.StringRelatedField(many=True)
-    customer = serializers.StringRelatedField()
-    worker = serializers.StringRelatedField()
-    order_status = serializers.StringRelatedField()
+    # customer = serializers.StringRelatedField()
+    # worker = serializers.StringRelatedField()
+    # order_status = serializers.StringRelatedField()
 
     class Meta:
         model = Order
@@ -90,15 +89,15 @@ class OrderSerializer(serializers.ModelSerializer):
                   "order_status"
                   ]
 
-    # def to_representation(self, instance):
-    #     data = super().to_representation(instance)
-    #     data['category'] = instance.category.name
-    #     data['specialization'] = instance.specialization.name
-    #     data['qualification'] = instance.qualification.name
-    #     data['address'] = [f"{x}, " for x in instance.address.fields.values()]
-    #     data['files'] = [f.file_url for f in instance.files.all()]
-    #     data['chats'] = [chat.name for chat in instance.chats.all()]
-    #     data['customer'] = instance.customer.name
-    #     data['worker'] = instance.worker.name
-    #     data['order_status'] = instance.order_status.name
-    #     return data
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data['category'] = instance.category.name
+        data['specialization'] = instance.specialization.name
+        data['qualification'] = instance.qualification.name
+        data['address'] = [f"{k}: {v}" for k, v in list(instance.address.__dict__.items())[2:]]
+        data['files'] = [f.file_url for f in instance.files.all()]
+        data['chats'] = [chat.name for chat in instance.chats.all()]
+        data['customer'] = instance.customer.name
+        data['worker'] = instance.worker.name
+        data['order_status'] = instance.order_status.name
+        return data
