@@ -48,3 +48,5 @@ class OrderViewSet(viewsets.ModelViewSet):
         if not pk:
             return Order.objects.all()
         return Order.objects.filter(pk=pk)
+
+    permission_classes = [permissions.IsAuthenticated]
