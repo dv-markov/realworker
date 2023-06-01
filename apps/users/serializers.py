@@ -79,7 +79,7 @@ class OrderSerializer(serializers.ModelSerializer):
                   "specialization",
                   "qualification",
                   "address",
-                  "date_time"
+                  "date_time",
                   "description",
                   "files",
                   "price",
