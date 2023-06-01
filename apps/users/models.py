@@ -40,24 +40,67 @@ class UserProfile(models.Model):
         return self.user.name
 
 
-class Country(models.Model):
-    name = models.CharField(max_length=100, db_index=True)
+class ReturnNameDbIndex(models.Model):
+    name = models.CharField(max_length=255, db_index=True)
 
     def __str__(self):
         return self.name
 
 
-class City(models.Model):
-    name = models.CharField(max_length=100, db_index=True)
+class Country(ReturnNameDbIndex):
+    pass
+
+
+class City(ReturnNameDbIndex):
     country = models.ForeignKey(Country, on_delete=models.PROTECT, null=True)
 
-    def __str__(self):
-        return self.name
+
+class Category(ReturnNameDbIndex):
+    pass
 
 
-class Specialization(models.Model):
-    name = models.CharField(max_length=255, db_index=True)
+class Specialization(ReturnNameDbIndex):
+    category_id = models.ForeignKey(Category, on_delete=models.PROTECT, null=True)
 
 
-class Qualification(models.Model):
-    name = models.CharField(max_length=255, db_index=True)
+class Qualification(ReturnNameDbIndex):
+    specialization_id = models.ForeignKey(Specialization, on_delete=models.PROTECT, null=True)
+    price = models.IntegerField(default=0)
+
+
+class GeoData(models.Model):
+    source = models.CharField(blank=True)
+    result = models.CharField(blank=True)
+    postal_code = models.CharField(blank=True)
+    country = models.CharField(blank=True)
+    region = models.CharField(blank=True)
+    city_area = models.CharField(blank=True)
+    city_district = models.CharField(blank=True)
+    street = models.CharField(blank=True)
+    house = models.CharField(blank=True)
+    geo_lat = models.CharField(blank=True)
+    geo_lon = models.CharField(blank=True)
+    qc_geo = models.CharField(blank=True)
+
+
+class OrderStatus(ReturnNameDbIndex):
+    pass
+
+
+class Order(models.Model):
+    number = models.CharField(max_length=255, db_index=True)
+    category_id = models.ForeignKey(Category, on_delete=models.PROTECT, null=True)
+    specialization_id = models.ForeignKey(Specialization, on_delete=models.PROTECT, null=True)
+    qualification_id = models.ForeignKey(Qualification, on_delete=models.PROTECT, null=True)
+    description = models.CharField(blank=True)
+    address = models.ForeignKey(GeoData, on_delete=models.PROTECT, null=True)
+    date_time = models.DateTimeField(auto_now=True)
+    price = models.IntegerField(default=0)
+    customer_id = models.ForeignKey(CustomUser, on_delete=models.PROTECT, null=True)
+    worker_id = models.ForeignKey(CustomUser, on_delete=models.PROTECT, null=True)
+    order_status_id = models.ForeignKey(OrderStatus, on_delete=models.PROTECT, null=True)
+
+
+class File(models.Model):
+    order_id = models.ForeignKey(Order, on_delete=models.PROTECT, null=True)
+    file_url = models.CharField(blank=True)

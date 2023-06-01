@@ -54,3 +54,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
         data['qualifications'] = [qual.name for qual in instance.qualifications.all()]
         data = flatten_json(data, flatten_lists=False)
         return data
+
+
+class OrderSerializer(serializers.ModelSerializer):
+    pass
