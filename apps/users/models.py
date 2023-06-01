@@ -60,11 +60,11 @@ class Category(ReturnNameDbIndex):
 
 
 class Specialization(ReturnNameDbIndex):
-    category_id = models.ForeignKey(Category, on_delete=models.PROTECT, null=True)
+    category = models.ForeignKey(Category, on_delete=models.PROTECT, null=True)
 
 
 class Qualification(ReturnNameDbIndex):
-    specialization_id = models.ForeignKey(Specialization, on_delete=models.PROTECT, null=True)
+    specialization = models.ForeignKey(Specialization, on_delete=models.PROTECT, null=True)
     price = models.IntegerField(default=0)
 
 
@@ -89,18 +89,31 @@ class OrderStatus(ReturnNameDbIndex):
 
 class Order(models.Model):
     number = models.CharField(max_length=255, db_index=True)
-    category_id = models.ForeignKey(Category, on_delete=models.PROTECT, null=True)
-    specialization_id = models.ForeignKey(Specialization, on_delete=models.PROTECT, null=True)
-    qualification_id = models.ForeignKey(Qualification, on_delete=models.PROTECT, null=True)
+    category = models.ForeignKey(Category, on_delete=models.PROTECT, null=True)
+    specialization = models.ForeignKey(Specialization, on_delete=models.PROTECT, null=True)
+    qualification = models.ForeignKey(Qualification, on_delete=models.PROTECT, null=True)
     description = models.CharField(blank=True)
     address = models.ForeignKey(GeoData, on_delete=models.PROTECT, null=True)
     date_time = models.DateTimeField(auto_now=True)
     price = models.IntegerField(default=0)
-    customer_id = models.ForeignKey(CustomUser, on_delete=models.PROTECT, null=True)
-    worker_id = models.ForeignKey(CustomUser, on_delete=models.PROTECT, null=True)
-    order_status_id = models.ForeignKey(OrderStatus, on_delete=models.PROTECT, null=True)
+    customer = models.ForeignKey(CustomUser, on_delete=models.PROTECT, null=True)
+    worker = models.ForeignKey(CustomUser, on_delete=models.PROTECT, null=True)
+    order_status = models.ForeignKey(OrderStatus, on_delete=models.PROTECT, null=True)
+    files = models.ManyToManyField("File")
+    chats = models.ManyToManyField("Chat")
+
+    def __str__(self):
+        return self.number
 
 
 class File(models.Model):
-    order_id = models.ForeignKey(Order, on_delete=models.PROTECT, null=True)
+    # order_id = models.ForeignKey(Order, on_delete=models.PROTECT, null=True)
     file_url = models.CharField(blank=True)
+
+    def __str__(self):
+        return self.file_url
+
+
+class Chat(ReturnNameDbIndex):
+    content = models.CharField(blank=True)
+
