@@ -65,7 +65,8 @@ class OrderSerializer(serializers.ModelSerializer):
     category = serializers.StringRelatedField()
     specialization = serializers.StringRelatedField()
     qualification = serializers.StringRelatedField()
-    address = GeoDataSerializer()
+    # address = GeoDataSerializer()
+    address = serializers.StringRelatedField()
     files = serializers.StringRelatedField(many=True)
     chats = serializers.StringRelatedField(many=True)
     customer = serializers.StringRelatedField()
@@ -89,14 +90,15 @@ class OrderSerializer(serializers.ModelSerializer):
                   "order_status"
                   ]
 
-    def to_representation(self, instance):
-        data = super().to_representation(instance)
-        data['category'] = instance.category.name
-        data['specialization'] = instance.specialization.name
-        data['qualification'] = instance.qualification.name
-        data['files'] = [f.file_url for f in instance.files.all()]
-        data['chats'] = [chat.name for chat in instance.chats.all()]
-        data['customer'] = instance.customer.name
-        data['worker'] = instance.worker.name
-        data['order_status'] = instance.order_status.name
-        return data
+    # def to_representation(self, instance):
+    #     data = super().to_representation(instance)
+    #     data['category'] = instance.category.name
+    #     data['specialization'] = instance.specialization.name
+    #     data['qualification'] = instance.qualification.name
+    #     data['address'] = [f"{x}, " for x in instance.address.fields.values()]
+    #     data['files'] = [f.file_url for f in instance.files.all()]
+    #     data['chats'] = [chat.name for chat in instance.chats.all()]
+    #     data['customer'] = instance.customer.name
+    #     data['worker'] = instance.worker.name
+    #     data['order_status'] = instance.order_status.name
+    #     return data

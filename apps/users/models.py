@@ -111,12 +111,13 @@ class OrderStatus(models.Model):
 
 
 class Order(models.Model):
-    number = models.CharField(max_length=36, unique=True, default=uuid.uuid4())
+    number = models.CharField(max_length=36, db_index=True, default=uuid.uuid4())
     category = models.ForeignKey(Category, on_delete=models.PROTECT, null=True)
     specialization = models.ForeignKey(Specialization, on_delete=models.PROTECT, null=True)
     qualification = models.ForeignKey(Qualification, on_delete=models.PROTECT, null=True)
     description = models.TextField(blank=True)
     address = models.ForeignKey(GeoData, on_delete=models.PROTECT, null=True)
+    # address = models.TextField(blank=True)
     date_time = models.DateTimeField(auto_now=True)
     price = models.IntegerField(default=0)
     customer = models.ForeignKey(CustomUser, related_name="customer", on_delete=models.PROTECT, null=True)
