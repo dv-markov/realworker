@@ -6,6 +6,13 @@ from django.contrib.auth.models import AbstractUser, Group
 from django.utils.translation import gettext_lazy as _
 
 
+class Role(models.Model):
+    name = models.CharField('Роль', max_length=100, db_index=True)
+
+    def __str__(self):
+        return self.name
+
+
 class CustomUser(AbstractUser):
     # username_validator = UnicodeUsernameValidator()
 

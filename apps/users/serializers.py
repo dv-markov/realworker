@@ -1,7 +1,13 @@
 from django.contrib.auth.models import Group
-from .models import CustomUser, UserProfile, GeoData, Country, City, Category, Specialization, Qualification
+from .models import Role, CustomUser, UserProfile, GeoData, Country, City, Category, Specialization, Qualification
 from rest_framework import serializers
 from .utils import flatten_json
+
+
+class RoleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Role
+        fields = "__all__"
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -72,7 +78,8 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserProfile
-        fields = ['user',
+        fields = ['id',
+                  'user',
                   'country',
                   'specializations',
                   'qualifications',
