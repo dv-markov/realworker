@@ -1,10 +1,11 @@
 from django.shortcuts import render
 
 from django.contrib.auth.models import Group
-from rest_framework import viewsets
+from rest_framework import viewsets, views
+from rest_framework.response import Response
 from rest_framework import permissions
 from rest_framework import generics
-from .serializers import UserSerializer, CountrySerializer, CitySerializer, CategorySerializer, \
+from .serializers import RoleSerializer, UserSerializer, CountrySerializer, CitySerializer, CategorySerializer, \
     SpecializationSerializer, QualificationSerializer, GeoDataSerializer, UserProfileSerializer
 
 from .models import CustomUser, Country, City, Category, Specialization, Qualification, GeoData, UserProfile
@@ -17,6 +18,14 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = CustomUser.objects.all().order_by('-date_joined')
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+
+class RoleView(views.APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        role_name = request.user.role.name if request.user.role else None
+        return Response({'role_name': role_name})
 
 
 # class GroupViewSet(viewsets.ModelViewSet):
