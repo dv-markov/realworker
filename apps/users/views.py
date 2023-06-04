@@ -5,9 +5,9 @@ from rest_framework import viewsets
 from rest_framework import permissions
 from rest_framework import generics
 from .serializers import UserSerializer, GroupSerializer, CountrySerializer, CitySerializer, CategorySerializer, \
-    SpecializationSerializer, QualificationSerializer, GeoDataSerializer, UserProfileSerializer, OrderSerializer
+    SpecializationSerializer, QualificationSerializer, GeoDataSerializer, UserProfileSerializer
 
-from .models import CustomUser, Country, City, Category, Specialization, Qualification, GeoData, UserProfile, Order
+from .models import CustomUser, Country, City, Category, Specialization, Qualification, GeoData, UserProfile
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -69,17 +69,3 @@ class UserProfileView(generics.ListAPIView):
         # return UserProfile.objects.get(user__username=current_user)
 
     permission_classes = [permissions.IsAuthenticated]
-
-
-class OrderViewSet(viewsets.ModelViewSet):
-    queryset = Order.objects.all().order_by('pk')
-    serializer_class = OrderSerializer
-
-    def get_queryset(self):
-        pk = self.kwargs.get("pk")
-        if not pk:
-            return Order.objects.all()
-        return Order.objects.filter(pk=pk)
-
-    permission_classes = [permissions.IsAuthenticated]
-

@@ -1,8 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
-from .models import CustomUser, UserProfile, Country, City, Category, Specialization, Qualification, GeoData, \
-    OrderStatus, Order, File, Chat
+from .models import CustomUser, UserProfile, Country, City, Category, Specialization, Qualification, GeoData
 
 
 class CustomUserAdmin(UserAdmin):
@@ -31,7 +30,3 @@ admin.site.register(Category)
 admin.site.register(Specialization)
 admin.site.register(Qualification)
 admin.site.register(GeoData)
-admin.site.register(OrderStatus)
-admin.site.register(Order)
-admin.site.register(File)
-admin.site.register(Chat)

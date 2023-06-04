@@ -25,11 +25,17 @@ from django.conf.urls.static import static
 router = routers.DefaultRouter()
 router.register(r'users', views.UserViewSet)
 router.register(r'groups', views.GroupViewSet)
-router.register(r'orders', views.OrderViewSet)
+# router.register(r'orders', views.OrderViewSet)
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
+    # ссылка на модели приложения orders
+    path("api/orders/", include("apps.orders.urls")),
+
+    # ссылка на дополнительные модели приложения users
+    path("api/etc/", include("apps.users.urls")),
+
     # admin access
     path('api/admin/', admin.site.urls),
 
@@ -44,11 +50,6 @@ urlpatterns = [
     # path('api/v1/auth/', include('djoser.urls')),  # djoser
     re_path(r'^api/auth/', include('djoser.urls')),  # djoser
     re_path(r'^api/auth/', include('djoser.urls.authtoken')),  # djoser
-
-    # ссылка на дополнительные модели приложения users
-    path("api/etc/", include("apps.users.urls")),
-
-
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

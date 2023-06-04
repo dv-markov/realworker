@@ -1,5 +1,5 @@
 from django.contrib.auth.models import Group
-from .models import CustomUser, UserProfile, Order, GeoData, Country, City, Category, Specialization, Qualification
+from .models import CustomUser, UserProfile, GeoData, Country, City, Category, Specialization, Qualification
 from rest_framework import serializers
 from .utils import flatten_json
 
@@ -88,47 +88,4 @@ class UserProfileSerializer(serializers.ModelSerializer):
         data['specializations'] = [spec.name for spec in instance.specializations.all()]
         data['qualifications'] = [qual.name for qual in instance.qualifications.all()]
         data = flatten_json(data, flatten_lists=False)
-        return data
-
-
-class OrderSerializer(serializers.ModelSerializer):
-    # category = serializers.StringRelatedField()
-    # specialization = serializers.StringRelatedField()
-    # qualification = serializers.StringRelatedField()
-    # address = GeoDataSerializer()
-    files = serializers.StringRelatedField(many=True)
-    chats = serializers.StringRelatedField(many=True)
-    # customer = serializers.StringRelatedField()
-    # worker = serializers.StringRelatedField()
-    # order_status = serializers.StringRelatedField()
-
-    class Meta:
-        model = Order
-        fields = ["id",
-                  "number",
-                  "category",
-                  "specialization",
-                  "qualification",
-                  "address",
-                  "date_time",
-                  "description",
-                  "files",
-                  "price",
-                  "chats",
-                  "customer",
-                  "worker",
-                  "order_status"
-                  ]
-
-    def to_representation(self, instance):
-        data = super().to_representation(instance)
-        data['category'] = instance.category.name
-        data['specialization'] = instance.specialization.name
-        data['qualification'] = instance.qualification.name
-        data['address'] = [f"{k}: {v}" for k, v in list(instance.address.__dict__.items())[2:]]
-        data['files'] = [f.file_url for f in instance.files.all()]
-        data['chats'] = [chat.name for chat in instance.chats.all()]
-        data['customer'] = instance.customer.name
-        data['worker'] = instance.worker.name
-        data['order_status'] = instance.order_status.name
         return data
