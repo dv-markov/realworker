@@ -24,7 +24,7 @@ class CustomUser(AbstractUser):
         },
     )
 
-    REQUIRED_FIELDS = ["name", "city", "role", "email"]
+    # REQUIRED_FIELDS = ["name", "city", "role", "email"]
 
 
 class UserProfile(models.Model):
