@@ -39,6 +39,8 @@ class OrderSerializer(serializers.ModelSerializer):
                   "specialization",
                   "qualification",
                   "address",
+                  "geo_lat",
+                  "geo_lon",
                   "date_time",
                   "description",
                   "files",

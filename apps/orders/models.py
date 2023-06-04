@@ -35,6 +35,8 @@ class Order(models.Model):
     description = models.TextField(blank=True)
     address = models.ForeignKey(GeoData, on_delete=models.PROTECT, null=True)
     # address = models.TextField(blank=True)
+    geo_lat = models.CharField(max_length=100, null=True)
+    geo_lon = models.CharField(max_length=100, null=True)
     date_time = models.DateTimeField(auto_now=True)
     price = models.IntegerField(default=0)
     customer = models.ForeignKey(CustomUser, related_name="customer", on_delete=models.PROTECT, null=True)
