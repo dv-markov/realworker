@@ -18,7 +18,7 @@ class CustomUser(AbstractUser):
 
     name = models.CharField('ФИО', max_length=255, default='')
     city = models.ForeignKey('City', on_delete=models.PROTECT, null=True)
-    role = models.ForeignKey(Group, on_delete=models.PROTECT, null=True)
+    role = models.ForeignKey(Role, on_delete=models.PROTECT, null=True)
 
     username = models.CharField(
         "Телефон",

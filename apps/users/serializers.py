@@ -1,6 +1,6 @@
-from django.contrib.auth.models import Group
-from .models import Role, CustomUser, UserProfile, GeoData, Country, City, Category, Specialization, Qualification
+# from django.contrib.auth.models import Group
 from rest_framework import serializers
+from .models import Role, CustomUser, UserProfile, GeoData, Country, City, Category, Specialization, Qualification
 from .utils import flatten_json
 
 
@@ -28,10 +28,10 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         return data
 
 
-class GroupSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Group
-        fields = ['url', 'name']
+# class GroupSerializer(serializers.HyperlinkedModelSerializer):
+#     class Meta:
+#         model = Group
+#         fields = ['url', 'name']
 
 
 class CountrySerializer(serializers.ModelSerializer):
