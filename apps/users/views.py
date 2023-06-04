@@ -1,11 +1,13 @@
 from django.shortcuts import render
 
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import Group
 from rest_framework import viewsets
 from rest_framework import permissions
 from rest_framework import generics
-from .serializers import UserSerializer, GroupSerializer, UserProfileSerializer, OrderSerializer
-from .models import CustomUser, UserProfile, Order
+from .serializers import UserSerializer, GroupSerializer, CountrySerializer, CitySerializer, CategorySerializer, \
+    SpecializationSerializer, QualificationSerializer, GeoDataSerializer, UserProfileSerializer, OrderSerializer
+
+from .models import CustomUser, Country, City, Category, Specialization, Qualification, GeoData, UserProfile, Order
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -24,6 +26,36 @@ class GroupViewSet(viewsets.ModelViewSet):
     queryset = Group.objects.all().order_by('pk')
     serializer_class = GroupSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+
+class CountryViewSet(viewsets.ModelViewSet):
+    queryset = Country.objects.all()
+    serializer_class = CountrySerializer
+
+
+class CityViewSet(viewsets.ModelViewSet):
+    queryset = City.objects.all()
+    serializer_class = CitySerializer
+
+
+class CategoryViewSet(viewsets.ModelViewSet):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+
+
+class SpecializationViewSet(viewsets.ModelViewSet):
+    queryset = Specialization.objects.all()
+    serializer_class = SpecializationSerializer
+
+
+class QualificationViewSet(viewsets.ModelViewSet):
+    queryset = Qualification.objects.all()
+    serializer_class = QualificationSerializer
+
+
+class GeoDataViewSet(viewsets.ModelViewSet):
+    queryset = GeoData.objects.all()
+    serializer_class = GeoDataSerializer
 
 
 class UserProfileView(generics.ListAPIView):
@@ -50,3 +82,4 @@ class OrderViewSet(viewsets.ModelViewSet):
         return Order.objects.filter(pk=pk)
 
     permission_classes = [permissions.IsAuthenticated]
+

@@ -1,5 +1,5 @@
 from django.contrib.auth.models import Group
-from .models import CustomUser, UserProfile, Order, GeoData
+from .models import CustomUser, UserProfile, Order, GeoData, Country, City, Category, Specialization, Qualification
 from rest_framework import serializers
 from .utils import flatten_json
 
@@ -11,7 +11,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = CustomUser
         # fields = ['url', 'id', 'name', 'city', 'username', 'email', 'role']
-        fields = ['name', 'city', 'username', 'email', 'role']
+        fields = ['id', 'name', 'city', 'username', 'email', 'role']
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
@@ -26,6 +26,36 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Group
         fields = ['url', 'name']
+
+
+class CountrySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Country
+        fields = "__all__"
+
+
+class CitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = City
+        fields = "__all__"
+
+
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = "__all__"
+
+
+class SpecializationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Specialization
+        fields = "__all__"
+
+
+class QualificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Qualification
+        fields = "__all__"
 
 
 class GeoDataSerializer(serializers.ModelSerializer):
@@ -74,7 +104,8 @@ class OrderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        fields = ["number",
+        fields = ["id",
+                  "number",
                   "category",
                   "specialization",
                   "qualification",

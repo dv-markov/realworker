@@ -36,7 +36,7 @@ class UserProfile(models.Model):
     position = models.CharField('Position', max_length=255, default='')
     last_active = models.DateTimeField('Last active', auto_now_add=True)
     messages = models.CharField('Messages', max_length=255, default='')
-    user = models.ForeignKey(CustomUser, on_delete=models.PROTECT, null=True)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return self.user.name
@@ -91,7 +91,7 @@ class Qualification(models.Model):
 class GeoData(models.Model):
     source = models.CharField(max_length=255)
     result = models.CharField(max_length=255)
-    postal_code = models.CharField(max_length=255)
+    postal_code = models.CharField(max_length=255, db_index=True)
     country_text = models.CharField(max_length=255)
     region = models.CharField(max_length=255)
     city_area = models.CharField(max_length=255)
@@ -111,7 +111,7 @@ class OrderStatus(models.Model):
 
 
 class Order(models.Model):
-    number = models.CharField(max_length=36, db_index=True, default=uuid.uuid4())
+    number = models.UUIDField(default=uuid.uuid4, editable=False)
     category = models.ForeignKey(Category, on_delete=models.PROTECT, null=True)
     specialization = models.ForeignKey(Specialization, on_delete=models.PROTECT, null=True)
     qualification = models.ForeignKey(Qualification, on_delete=models.PROTECT, null=True)
@@ -127,7 +127,7 @@ class Order(models.Model):
     chats = models.ManyToManyField("Chat")
 
     def __str__(self):
-        return self.number
+        return str(self.number)
 
 
 class File(models.Model):

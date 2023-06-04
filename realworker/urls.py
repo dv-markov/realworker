@@ -30,19 +30,25 @@ router.register(r'orders', views.OrderViewSet)
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
-    # admin acess
+    # admin access
     path('api/admin/', admin.site.urls),
+
     # userprofile
     path('api/userprofile/', views.UserProfileView.as_view()),
+
     # rest_framework
     path('api/', include(router.urls)),
     path('api/api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+
     # djoser
     # path('api/v1/auth/', include('djoser.urls')),  # djoser
     re_path(r'^api/auth/', include('djoser.urls')),  # djoser
     re_path(r'^api/auth/', include('djoser.urls.authtoken')),  # djoser
-    # djoser - does not work
-    # url(r'^auth/', include('djoser.urls')),
-    # url(r'^auth/', include('djoser.urls.authtoken')),
+
+    # ссылка на дополнительные модели приложения users
+    path("api/etc/", include("apps.users.urls")),
+
+
+
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

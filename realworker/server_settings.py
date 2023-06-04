@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'apps.users.apps.UsersConfig',  # регистрация приложения users
+    'apps.orders.apps.OrdersConfig',  # регистрация приложения orders
     'rest_framework',
     'rest_framework.authtoken',
     'djoser',
