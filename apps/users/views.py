@@ -24,8 +24,10 @@ class RoleView(views.APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
+        user_name = request.user.name if request.user else None
         role_name = request.user.role.name if request.user.role else None
-        return Response({'role_name': role_name})
+
+        return Response({'user_name': user_name, 'role_name': role_name})
 
 
 # class GroupViewSet(viewsets.ModelViewSet):

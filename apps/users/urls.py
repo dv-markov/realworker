@@ -13,6 +13,6 @@ router.register(r'qualifications', views.QualificationViewSet)
 router.register(r'geodatas', views.GeoDataViewSet)
 
 urlpatterns = [
-    path("role/", views.RoleView.as_view(), name="role-name"),
+    path("user-name-role/", views.RoleView.as_view(), name="user-name-role"),
     path("", include(router.urls)),
 ]
