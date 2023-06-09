@@ -10,5 +10,6 @@ router.register(r'orderstatuses', views.OrderStatusViewSet)
 router.register(r'', views.OrderViewSet)
 
 urlpatterns = [
+    path("my-orders/", views.MyOrderListView.as_view(), name="my-orders"),
     path("", include(router.urls)),
 ]

@@ -1,4 +1,4 @@
-import uuid
+import json
 
 from django.db import models
 from django.contrib.auth.models import AbstractUser, Group
@@ -108,3 +108,20 @@ class GeoData(models.Model):
     geo_lat = models.CharField(max_length=255)
     geo_lon = models.CharField(max_length=255)
     qc_geo = models.CharField(max_length=255)
+
+    # def __str__(self):
+    #     field_data = {}
+    #     print(self._meta.fields)
+    #     for field in self._meta.fields:
+    #         field_name = field.name
+    #         field_value = getattr(self, field_name)
+    #         field_data[field_name] = field_value
+    #     return json.dumps(field_data, indent=4)
+
+    def __str__(self):
+        fields_dict = {
+            field.name: getattr(self, field.name)
+            for field in self._meta.fields
+        }
+        # return str(json.dumps(fields_dict))
+        return str(fields_dict)
