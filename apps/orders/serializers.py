@@ -51,6 +51,23 @@ class WorkerOrderSerializer(serializers.ModelSerializer):
                   "orderStatus"]
 
 
+class OpenOrderSerializer(serializers.ModelSerializer):
+    address = serializers.CharField(source='address.__str__')
+    category = serializers.CharField(source='category.name')
+    specialization = serializers.CharField(source='specialization.name')
+    qualification = serializers.CharField(source='qualification.name')
+    customer = serializers.CharField(source='customer.name')
+    dateTime = serializers.DateTimeField(source='date_time')
+    orderStatus = serializers.CharField(source='order_status.name')
+    geoLat = serializers.CharField(source='geo_lat')
+    geoLon = serializers.CharField(source='geo_lon')
+
+    class Meta:
+        model = Order
+        fields = ["number", "address", "category", "specialization", "qualification", "customer", "dateTime",
+                  "orderStatus", "price", "geoLat", "geoLon"]
+
+
 class OrderSerializer(serializers.ModelSerializer):
     # category = serializers.StringRelatedField()
     # specialization = serializers.StringRelatedField()

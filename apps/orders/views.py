@@ -4,7 +4,7 @@ from rest_framework import generics, viewsets
 from rest_framework import permissions
 from .models import File, Chat, OrderStatus, Order
 from .serializers import FileSerializer, ChatSerializer, OrderStatusSerializer, OrderSerializer, \
-    CustomerOrderSerializer, WorkerOrderSerializer
+    CustomerOrderSerializer, WorkerOrderSerializer, OpenOrderSerializer
 
 
 class FileViewSet(viewsets.ModelViewSet):
@@ -47,23 +47,33 @@ class OrderViewSet(viewsets.ModelViewSet):
     #     serializer.save(number=f"{current_year:02d}-{new_order_number:04d}")
 
 
+CUSTOMER_ROLE_NAME = "customer"
+WORKER_ROLE_NAME = "worker"
+
+
 class MyOrderListView(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
-    CUSTOMER_ROLE_NAME = "customer"
-    WORKER_ROLE_NAME = "worker"
 
     def get_serializer_class(self):
         user = self.request.user
-        if user.role.name == self.CUSTOMER_ROLE_NAME:
+        if user.role.name == CUSTOMER_ROLE_NAME:
             return CustomerOrderSerializer
-        elif user.role.name == self.WORKER_ROLE_NAME:
+        elif user.role.name == WORKER_ROLE_NAME:
             return WorkerOrderSerializer
 
     def get_queryset(self):
         user = self.request.user
-        if user.role.name == self.CUSTOMER_ROLE_NAME:
+        if user.role.name == CUSTOMER_ROLE_NAME:
             return Order.objects.filter(customer=user)
-        elif user.role.name == self.WORKER_ROLE_NAME:
+        elif user.role.name == WORKER_ROLE_NAME:
             return Order.objects.filter(worker=user)
 
 
+class OpenOrderListView(generics.ListAPIView):
+    queryset = Order.objects.filter(worker=None)
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_serializer_class(self):
+        user = self.request.user
+        if user.role.name == WORKER_ROLE_NAME:
+            return OpenOrderSerializer
