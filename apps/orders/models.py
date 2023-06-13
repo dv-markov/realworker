@@ -1,4 +1,3 @@
-import uuid
 import datetime
 
 from django.db import models
@@ -74,5 +73,3 @@ class Order(models.Model):
 
     def __str__(self):
         return str(self.number)
-
-

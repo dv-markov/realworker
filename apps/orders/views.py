@@ -2,9 +2,11 @@ import datetime
 from django.shortcuts import render
 from rest_framework import generics, viewsets
 from rest_framework import permissions
+from rest_framework.response import Response
 from .models import File, Chat, OrderStatus, Order
 from .serializers import FileSerializer, ChatSerializer, OrderStatusSerializer, OrderSerializer, \
     CustomerOrderSerializer, WorkerOrderSerializer, OpenOrderSerializer
+
 
 
 class FileViewSet(viewsets.ModelViewSet):
@@ -72,8 +74,15 @@ class MyOrderListView(generics.ListAPIView):
 class OpenOrderListView(generics.ListAPIView):
     queryset = Order.objects.filter(worker=None)
     permission_classes = [permissions.IsAuthenticated]
+    serializer_class = OpenOrderSerializer
 
-    def get_serializer_class(self):
+    # def get_serializer_class(self):
+    #     user = self.request.user
+    #     if user.role.name == WORKER_ROLE_NAME:
+    #         return OpenOrderSerializer
+
+    def get(self, request, *args, **kwargs):
         user = self.request.user
         if user.role.name == WORKER_ROLE_NAME:
-            return OpenOrderSerializer
+            return super().get(request, *args, **kwargs)
+        return Response({})
