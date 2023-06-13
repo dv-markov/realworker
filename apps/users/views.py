@@ -27,7 +27,7 @@ class RoleView(views.APIView):
         user_name = request.user.name if request.user else None
         role_name = request.user.role.name if request.user.role else None
 
-        return Response({'user_name': user_name, 'role_name': role_name})
+        return Response({'userName': user_name, 'roleName': role_name})
 
 
 # class GroupViewSet(viewsets.ModelViewSet):

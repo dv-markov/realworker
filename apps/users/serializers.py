@@ -74,6 +74,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
     country = serializers.StringRelatedField()
     specializations = serializers.StringRelatedField(many=True)
     qualifications = serializers.StringRelatedField(many=True)
+    lastActive = serializers.CharField(source="last_active")
     user = UserSerializer()
 
     class Meta:
@@ -86,7 +87,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
                   'photo',
                   'company',
                   'position',
-                  'last_active',
+                  'lastActive',
                   'messages']
 
     def to_representation(self, instance):
