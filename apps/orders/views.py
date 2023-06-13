@@ -3,10 +3,15 @@ from django.shortcuts import render
 from rest_framework import generics, viewsets
 from rest_framework import permissions
 from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.decorators import action
 from .models import File, Chat, OrderStatus, Order
 from .serializers import FileSerializer, ChatSerializer, OrderStatusSerializer, OrderSerializer, \
-    CustomerOrderSerializer, WorkerOrderSerializer, OpenOrderSerializer, CreateOrderSerializer
+    CustomerOrderSerializer, WorkerOrderSerializer, OpenOrderSerializer, CreateOrderSerializer, OrderCreateSerializer
+from .permissions import IsCustomer
 
+CUSTOMER_ROLE_NAME = "customer"
+WORKER_ROLE_NAME = "worker"
 
 
 class FileViewSet(viewsets.ModelViewSet):
@@ -38,6 +43,15 @@ class OrderViewSet(viewsets.ModelViewSet):
             return Order.objects.all()
         return Order.objects.filter(pk=pk)
 
+    @action(detail=False, methods=['post'], permission_classes=[permissions.IsAuthenticated, IsCustomer])
+    def create_order(self, request):
+        serializer = OrderCreateSerializer(data=request.data, context={'request': request})
+        if serializer.is_valid():
+            order = serializer.save()
+            order_serializer = OrderSerializer(order)
+            return Response(order_serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
     # def perform_create(self, serializer):
     #     current_year = datetime.datetime.now().year % 100
     #     max_order = Order.objects.order_by('-number').first()
@@ -47,10 +61,6 @@ class OrderViewSet(viewsets.ModelViewSet):
     #     else:
     #         new_order_number = 1
     #     serializer.save(number=f"{current_year:02d}-{new_order_number:04d}")
-
-
-CUSTOMER_ROLE_NAME = "customer"
-WORKER_ROLE_NAME = "worker"
 
 
 class MyOrderListView(generics.ListAPIView):

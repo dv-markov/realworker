@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import File, Chat, OrderStatus, Order
+from apps.users.models import Category, Qualification, Specialization, GeoData
 import datetime
 
 
@@ -70,6 +71,57 @@ class OpenOrderSerializer(serializers.ModelSerializer):
 
 class CreateOrderSerializer(serializers.ModelSerializer):
     pass
+
+
+class OrderCreateSerializer(serializers.Serializer):
+    address = serializers.PrimaryKeyRelatedField(queryset=GeoData.objects.all())
+    category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all())
+    specialization = serializers.PrimaryKeyRelatedField(queryset=Specialization.objects.all())
+    qualification = serializers.PrimaryKeyRelatedField(queryset=Qualification.objects.all())
+    # dateTime = serializers.DateTimeField(source="date_time")
+    description = serializers.CharField()
+    files = serializers.ListField(child=serializers.FileField(), required=False)
+    geoLat = serializers.CharField()
+    geoLon = serializers.CharField()
+    orderStatus = serializers.PrimaryKeyRelatedField(queryset=OrderStatus.objects.all())
+
+    def create(self, validated_data):
+        # Check if the user has the "customer" role
+        user = self.context['request'].user
+        if user.role.name != 'customer':
+            raise serializers.ValidationError("Only customers can create orders.")
+
+        # Extract validated data
+        address = validated_data.get('address')
+        category = validated_data.get('category')
+        specialization = validated_data.get('specialization')
+        qualification = validated_data.get('qualification')
+        # date_time = validated_data.get('dateTime')
+        description = validated_data.get('description')
+        files = validated_data.get('files', [])
+        geo_lat = validated_data.get('geoLat')
+        geo_lon = validated_data.get('geoLon')
+        order_status = validated_data.get('orderStatus')
+
+        # Create the order
+        order = Order.objects.create(
+            address=address,
+            category=category,
+            specialization=specialization,
+            qualification=qualification,
+            # date_time=date_time,
+            description=description,
+            geo_lat=geo_lat,
+            geo_lon=geo_lon,
+            customer=self.context['request'].user,  # Assign the current user as the customer
+            order_status=order_status  # Set the initial order status
+        )
+
+        # Add files to the order
+        # for file in files:
+        #     File.objects.create(file=file, order=order)
+
+        return order
 
 
 class OrderSerializer(serializers.ModelSerializer):
