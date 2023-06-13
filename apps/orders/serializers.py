@@ -68,6 +68,10 @@ class OpenOrderSerializer(serializers.ModelSerializer):
                   "orderStatus", "price", "geoLat", "geoLon"]
 
 
+class CreateOrderSerializer(serializers.ModelSerializer):
+    pass
+
+
 class OrderSerializer(serializers.ModelSerializer):
     # category = serializers.StringRelatedField()
     # specialization = serializers.StringRelatedField()
@@ -80,9 +84,11 @@ class OrderSerializer(serializers.ModelSerializer):
     # order_status = serializers.StringRelatedField()
     # number = serializers.CharField(read_only=True)
 
-    geoLat = serializers.CharField(source='geo_lat')
-    geoLon = serializers.CharField(source='geo_lon')
+    geoLat = serializers.CharField(source='geo_lat', required=False)
+    geoLon = serializers.CharField(source='geo_lon', required=False)
     dateTime = serializers.StringRelatedField(source='date_time')
+    address = serializers.CharField(source='address.__str__')
+    orderStatus = serializers.CharField(source='order_status.name', required=False)
     # orderStatus = serializers.CharField(source='order_status.name')
 
     class Meta:
@@ -102,7 +108,7 @@ class OrderSerializer(serializers.ModelSerializer):
                   "chats",
                   "customer",
                   "worker",
-                  "order_status"
+                  "orderStatus"
                   ]
 
     def to_representation(self, instance):
@@ -110,8 +116,7 @@ class OrderSerializer(serializers.ModelSerializer):
         data['category'] = instance.category.name
         data['specialization'] = instance.specialization.name
         data['qualification'] = instance.qualification.name
-        data['address'] = [f"{k}: {v}" for k, v in list(instance.address.__dict__.items())[2:]]
-        # data['address'] = instance.address.__str__
+        # data['address'] = [f"{k}: {v}" for k, v in list(instance.address.__dict__.items())[2:]]
         data['files'] = [f.file_url for f in instance.files.all()]
         data['chats'] = [chat.name for chat in instance.chats.all()]
         data['customer'] = instance.customer.name

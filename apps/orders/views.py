@@ -5,7 +5,7 @@ from rest_framework import permissions
 from rest_framework.response import Response
 from .models import File, Chat, OrderStatus, Order
 from .serializers import FileSerializer, ChatSerializer, OrderStatusSerializer, OrderSerializer, \
-    CustomerOrderSerializer, WorkerOrderSerializer, OpenOrderSerializer
+    CustomerOrderSerializer, WorkerOrderSerializer, OpenOrderSerializer, CreateOrderSerializer
 
 
 
@@ -86,3 +86,8 @@ class OpenOrderListView(generics.ListAPIView):
         if user.role.name == WORKER_ROLE_NAME:
             return super().get(request, *args, **kwargs)
         return Response({})
+
+
+class CreateOrderView(generics.CreateAPIView):
+    serializer_class = CreateOrderSerializer
+    permission_classes = [permissions.IsAuthenticated]
