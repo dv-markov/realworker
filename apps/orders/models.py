@@ -42,7 +42,7 @@ class Order(models.Model):
     date_time = models.DateTimeField(auto_now=True)
     price = models.IntegerField(default=0)
     customer = models.ForeignKey(CustomUser, related_name="customer", on_delete=models.PROTECT, null=True)
-    worker = models.ForeignKey(CustomUser, related_name="worker", on_delete=models.PROTECT, null=True)
+    worker = models.ForeignKey(CustomUser, related_name="worker", on_delete=models.PROTECT, null=True, blank=True)
     order_status = models.ForeignKey(OrderStatus, on_delete=models.PROTECT, null=True)
     files = models.ManyToManyField("File", blank=True)
     chats = models.ManyToManyField("Chat", blank=True)
