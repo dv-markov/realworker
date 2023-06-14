@@ -140,7 +140,8 @@ class OrderCreateSerializer(serializers.Serializer):
             geo_lat=geo_lat,
             geo_lon=geo_lon,
             customer=self.context['request'].user,  # Assign the current user as the customer
-            order_status=order_status  # Set the initial order status
+            order_status=order_status,  # Set the initial order status
+            price=qualification.price
         )
 
         # Add files to the order
