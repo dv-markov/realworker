@@ -33,8 +33,8 @@ class CustomerOrderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        fields = ["number", "description", "address", "category", "specialization", "qualification", "worker", "dateTime",
-                  "orderStatus"]
+        fields = ["number", "description", "address", "category", "specialization", "qualification", "worker",
+                  "dateTime", "orderStatus"]
 
     def get_worker(self, obj):
         worker = obj.worker
@@ -54,8 +54,8 @@ class WorkerOrderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        fields = ["number", "description", "address", "category", "specialization", "qualification", "customer", "dateTime",
-                  "orderStatus"]
+        fields = ["number", "description", "address", "category", "specialization", "qualification", "customer",
+                  "dateTime", "orderStatus"]
 
 
 class OpenOrderSerializer(serializers.ModelSerializer):
