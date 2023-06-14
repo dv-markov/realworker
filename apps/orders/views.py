@@ -43,7 +43,8 @@ class OrderViewSet(viewsets.ModelViewSet):
             return Order.objects.all()
         return Order.objects.filter(pk=pk)
 
-    @action(detail=False, methods=['post'], permission_classes=[permissions.IsAuthenticated, IsCustomer])
+    @action(detail=False, methods=['post'], url_path='create-order',
+            permission_classes=[permissions.IsAuthenticated, IsCustomer])
     def create_order(self, request):
         serializer = OrderCreateSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
