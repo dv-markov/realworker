@@ -87,9 +87,29 @@ class OrderCreateSerializer(serializers.Serializer):
     # dateTime = serializers.DateTimeField(source="date_time")
     description = serializers.CharField()
     # files = serializers.ListField(child=serializers.FileField(), required=False)
-    geoLat = serializers.CharField()
-    geoLon = serializers.CharField()
+    geoLat = serializers.CharField(required=False)
+    geoLon = serializers.CharField(required=False)
     # orderStatus = serializers.PrimaryKeyRelatedField(queryset=OrderStatus.objects.all())
+
+    # dateTime = serializers.DateTimeField(source='date_time', required=False)
+    # orderStatus = serializers.CharField(source='order_status.name', required=False)
+    #
+    # class Meta:
+    #     model = Order
+    #     fields = ["number",
+    #               "category",
+    #               "specialization",
+    #               "qualification",
+    #               "address",
+    #               "geoLat",
+    #               "geoLon",
+    #               "dateTime",
+    #               "description",
+    #               "price",
+    #               "customer",
+    #               "worker",
+    #               "orderStatus"
+    #               ]
 
     def create(self, validated_data):
         # Check if the user has the "customer" role
@@ -129,18 +149,24 @@ class OrderCreateSerializer(serializers.Serializer):
 
         return order
 
+    # def to_representation(self, instance):
+    #     data = super().to_representation(instance)
+    #     data.pop('id', None)
+    #     return data
+
 
 class OrderSerializer(serializers.ModelSerializer):
     # category = serializers.StringRelatedField()
     # specialization = serializers.StringRelatedField()
     # qualification = serializers.StringRelatedField()
     # address = GeoDataSerializer()
-    files = serializers.StringRelatedField(many=True)
-    chats = serializers.StringRelatedField(many=True)
     # customer = serializers.StringRelatedField()
     # worker = serializers.StringRelatedField()
     # order_status = serializers.StringRelatedField()
     # number = serializers.CharField(read_only=True)
+
+    # files = serializers.StringRelatedField(many=True)
+    # chats = serializers.StringRelatedField(many=True)
 
     geoLat = serializers.CharField(source='geo_lat', required=False)
     geoLon = serializers.CharField(source='geo_lon', required=False)
@@ -151,7 +177,7 @@ class OrderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        fields = ["id",
+        fields = [# "id",
                   "number",
                   "category",
                   "specialization",
@@ -161,9 +187,9 @@ class OrderSerializer(serializers.ModelSerializer):
                   "geoLon",
                   "dateTime",
                   "description",
-                  "files",
+                  # "files",
                   "price",
-                  "chats",
+                  # "chats",
                   "customer",
                   "worker",
                   "orderStatus"
@@ -175,8 +201,8 @@ class OrderSerializer(serializers.ModelSerializer):
         data['specialization'] = instance.specialization.name
         data['qualification'] = instance.qualification.name
         # data['address'] = [f"{k}: {v}" for k, v in list(instance.address.__dict__.items())[2:]]
-        data['files'] = [f.file_url for f in instance.files.all()]
-        data['chats'] = [chat.name for chat in instance.chats.all()]
+        # data['files'] = [f.file_url for f in instance.files.all()]
+        # data['chats'] = [chat.name for chat in instance.chats.all()]
         data['customer'] = instance.customer.name
         if data['worker']:
             data['worker'] = instance.worker.name
