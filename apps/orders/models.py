@@ -44,8 +44,8 @@ class Order(models.Model):
     customer = models.ForeignKey(CustomUser, related_name="customer", on_delete=models.PROTECT, null=True)
     worker = models.ForeignKey(CustomUser, related_name="worker", on_delete=models.PROTECT, null=True)
     order_status = models.ForeignKey(OrderStatus, on_delete=models.PROTECT, null=True)
-    files = models.ManyToManyField("File")
-    chats = models.ManyToManyField("Chat")
+    files = models.ManyToManyField("File", blank=True)
+    chats = models.ManyToManyField("Chat", blank=True)
 
     # def save(self, *args, **kwargs):
     #     if not self.number:
