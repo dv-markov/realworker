@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import File, Chat, OrderStatus, Order
-from apps.users.models import Category, Qualification, Specialization, GeoData
+from apps.users.models import Category, Qualification, Specialization  # , GeoData
 import datetime
 
 
@@ -23,11 +23,11 @@ class OrderStatusSerializer(serializers.ModelSerializer):
 
 
 class CustomerOrderSerializer(serializers.ModelSerializer):
-    address = serializers.CharField(source='address.__str__')
+    # address = serializers.CharField(source='address.__str__')
     category = serializers.CharField(source='category.name')
     specialization = serializers.CharField(source='specialization.name')
     qualification = serializers.CharField(source='qualification.name')
-    worker = serializers.CharField(source='worker.name')
+    worker = serializers.SerializerMethodField()
     dateTime = serializers.DateTimeField(source='date_time')
     orderStatus = serializers.CharField(source='order_status.name')
 
@@ -36,9 +36,15 @@ class CustomerOrderSerializer(serializers.ModelSerializer):
         fields = ["number", "address", "category", "specialization", "qualification", "worker", "dateTime",
                   "orderStatus"]
 
+    def get_worker(self, obj):
+        worker = obj.worker
+        if worker is not None:
+            return worker.name
+        return None
+
 
 class WorkerOrderSerializer(serializers.ModelSerializer):
-    address = serializers.CharField(source='address.__str__')
+    # address = serializers.CharField(source='address.__str__')
     category = serializers.CharField(source='category.name')
     specialization = serializers.CharField(source='specialization.name')
     qualification = serializers.CharField(source='qualification.name')
@@ -53,7 +59,7 @@ class WorkerOrderSerializer(serializers.ModelSerializer):
 
 
 class OpenOrderSerializer(serializers.ModelSerializer):
-    address = serializers.CharField(source='address.__str__')
+    # address = serializers.CharField(source='address.__str__')
     category = serializers.CharField(source='category.name')
     specialization = serializers.CharField(source='specialization.name')
     qualification = serializers.CharField(source='qualification.name')
@@ -74,16 +80,16 @@ class CreateOrderSerializer(serializers.ModelSerializer):
 
 
 class OrderCreateSerializer(serializers.Serializer):
-    address = serializers.PrimaryKeyRelatedField(queryset=GeoData.objects.all())
+    address = serializers.CharField()
     category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all())
     specialization = serializers.PrimaryKeyRelatedField(queryset=Specialization.objects.all())
     qualification = serializers.PrimaryKeyRelatedField(queryset=Qualification.objects.all())
     # dateTime = serializers.DateTimeField(source="date_time")
     description = serializers.CharField()
-    files = serializers.ListField(child=serializers.FileField(), required=False)
+    # files = serializers.ListField(child=serializers.FileField(), required=False)
     geoLat = serializers.CharField()
     geoLon = serializers.CharField()
-    orderStatus = serializers.PrimaryKeyRelatedField(queryset=OrderStatus.objects.all())
+    # orderStatus = serializers.PrimaryKeyRelatedField(queryset=OrderStatus.objects.all())
 
     def create(self, validated_data):
         # Check if the user has the "customer" role
@@ -98,10 +104,10 @@ class OrderCreateSerializer(serializers.Serializer):
         qualification = validated_data.get('qualification')
         # date_time = validated_data.get('dateTime')
         description = validated_data.get('description')
-        files = validated_data.get('files', [])
+        # files = validated_data.get('files', [])
         geo_lat = validated_data.get('geoLat')
         geo_lon = validated_data.get('geoLon')
-        order_status = validated_data.get('orderStatus')
+        order_status = OrderStatus.objects.get(pk=1)
 
         # Create the order
         order = Order.objects.create(
@@ -139,7 +145,7 @@ class OrderSerializer(serializers.ModelSerializer):
     geoLat = serializers.CharField(source='geo_lat', required=False)
     geoLon = serializers.CharField(source='geo_lon', required=False)
     dateTime = serializers.StringRelatedField(source='date_time')
-    address = serializers.CharField(source='address.__str__')
+    # address = serializers.CharField(source='address.__str__')
     orderStatus = serializers.CharField(source='order_status.name', required=False)
     # orderStatus = serializers.CharField(source='order_status.name')
 

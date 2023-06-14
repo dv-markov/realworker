@@ -98,6 +98,6 @@ class OpenOrderListView(generics.ListAPIView):
         return Response({})
 
 
-class CreateOrderView(generics.CreateAPIView):
-    serializer_class = CreateOrderSerializer
-    permission_classes = [permissions.IsAuthenticated]
+# class CreateOrderView(generics.CreateAPIView):
+#     serializer_class = CreateOrderSerializer
+#     permission_classes = [permissions.IsAuthenticated]

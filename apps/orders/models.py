@@ -1,7 +1,7 @@
 import datetime
 
 from django.db import models
-from apps.users.models import CustomUser, Category, Specialization, Qualification, GeoData
+from apps.users.models import CustomUser, Category, Specialization, Qualification #  , GeoData
 
 
 class File(models.Model):
@@ -35,8 +35,8 @@ class Order(models.Model):
     specialization = models.ForeignKey(Specialization, on_delete=models.PROTECT, null=True)
     qualification = models.ForeignKey(Qualification, on_delete=models.PROTECT, null=True)
     description = models.TextField(blank=True)
-    address = models.ForeignKey(GeoData, on_delete=models.PROTECT, null=True)
-    # address = models.TextField(blank=True)
+    # address = models.ForeignKey(GeoData, on_delete=models.PROTECT, null=True)
+    address = models.CharField(max_length=255, null=True)
     geo_lat = models.CharField(max_length=100, null=True)
     geo_lon = models.CharField(max_length=100, null=True)
     date_time = models.DateTimeField(auto_now=True)
