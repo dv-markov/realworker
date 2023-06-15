@@ -84,7 +84,7 @@ class OrderCreateSerializer(serializers.Serializer):
     category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all())
     specialization = serializers.PrimaryKeyRelatedField(queryset=Specialization.objects.all())
     qualification = serializers.PrimaryKeyRelatedField(queryset=Qualification.objects.all())
-    # dateTime = serializers.DateTimeField(source="date_time")
+    dateTime = serializers.DateTimeField(source="date_time")
     description = serializers.CharField()
     # files = serializers.ListField(child=serializers.FileField(), required=False)
     geoLat = serializers.CharField(required=False)
@@ -122,7 +122,7 @@ class OrderCreateSerializer(serializers.Serializer):
         category = validated_data.get('category')
         specialization = validated_data.get('specialization')
         qualification = validated_data.get('qualification')
-        # date_time = validated_data.get('dateTime')
+        date_time = validated_data.get('dateTime')
         description = validated_data.get('description')
         # files = validated_data.get('files', [])
         geo_lat = validated_data.get('geoLat')
@@ -135,7 +135,7 @@ class OrderCreateSerializer(serializers.Serializer):
             category=category,
             specialization=specialization,
             qualification=qualification,
-            # date_time=date_time,
+            date_time=date_time,
             description=description,
             geo_lat=geo_lat,
             geo_lon=geo_lon,
