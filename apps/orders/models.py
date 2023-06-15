@@ -39,7 +39,7 @@ class Order(models.Model):
     address = models.CharField(max_length=255, null=True)
     geo_lat = models.CharField(max_length=100, null=True)
     geo_lon = models.CharField(max_length=100, null=True)
-    date_time = models.CharField(max_length=255, null=True)
+    date_time = models.CharField(max_length=255)
     price = models.IntegerField(default=0)
     customer = models.ForeignKey(CustomUser, related_name="customer", on_delete=models.PROTECT, null=True)
     worker = models.ForeignKey(CustomUser, related_name="worker", on_delete=models.PROTECT, null=True, blank=True)
