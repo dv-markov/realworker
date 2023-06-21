@@ -75,6 +75,19 @@ class OpenOrderSerializer(serializers.ModelSerializer):
                   "orderStatus", "price", "geoLat", "geoLon"]
 
 
+class OrderDetailSerializer(serializers.ModelSerializer):
+    dateTime = serializers.CharField(source='date_time')
+    category = serializers.CharField(source='category.name')
+    specialization = serializers.CharField(source='specialization.name')
+    qualification = serializers.CharField(source='qualification.name')
+    customer = serializers.CharField(source='customer.name')
+
+    class Meta:
+        model = Order
+        fields = ["number", "address", "dateTime", "category", "specialization", "qualification", "description",
+                  "price", "customer"]
+
+
 class CreateOrderSerializer(serializers.ModelSerializer):
     pass
 

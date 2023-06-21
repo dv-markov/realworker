@@ -7,8 +7,9 @@ from rest_framework import status
 from rest_framework.decorators import action
 from .models import File, Chat, OrderStatus, Order
 from .serializers import FileSerializer, ChatSerializer, OrderStatusSerializer, OrderSerializer, \
-    CustomerOrderSerializer, WorkerOrderSerializer, OpenOrderSerializer, CreateOrderSerializer, OrderCreateSerializer
-from .permissions import IsCustomer
+    CustomerOrderSerializer, WorkerOrderSerializer, OpenOrderSerializer, CreateOrderSerializer, OrderCreateSerializer, \
+    OrderDetailSerializer
+from .permissions import IsCustomer, IsWorker
 
 CUSTOMER_ROLE_NAME = "customer"
 WORKER_ROLE_NAME = "worker"
@@ -30,6 +31,22 @@ class OrderStatusViewSet(viewsets.ModelViewSet):
     queryset = OrderStatus.objects.all()
     serializer_class = OrderStatusSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+
+class ShowOrderDetailsView(generics.RetrieveAPIView):
+    # queryset = Order.objects.all()
+    serializer_class = OrderDetailSerializer
+    permission_classes = [permissions.IsAuthenticated, IsWorker]
+    lookup_field = 'number'
+
+    def get_queryset(self):
+        queryset = Order.objects.filter(order_status=1)
+        return queryset
+
+    # def get_queryset(self):
+    #     order_number = self.kwargs.get("order_number")
+    #     print(order_number)
+    #     return Order.objects.get(number=order_number)
 
 
 class OrderViewSet(viewsets.ModelViewSet):
