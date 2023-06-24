@@ -13,6 +13,7 @@ urlpatterns = [
     path("my/", views.MyOrderListView.as_view(), name="my-orders"),
     path("open/", views.OpenOrderListView.as_view(), name="open-orders"),
     path("details/<str:number>/", views.ShowOrderDetailsView.as_view(), name="order-details"),
+    path("assign/<str:number>/", views.AssignOrderView.as_view(), name="assign-order"),
     # path("create-order/", views.CreateOrderView.as_view(), name="create-order"),
     path("", include(router.urls)),
 ]

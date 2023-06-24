@@ -8,7 +8,7 @@ from rest_framework.decorators import action
 from .models import File, Chat, OrderStatus, Order
 from .serializers import FileSerializer, ChatSerializer, OrderStatusSerializer, OrderSerializer, \
     CustomerOrderSerializer, WorkerOrderSerializer, OpenOrderSerializer, CreateOrderSerializer, OrderCreateSerializer, \
-    OrderDetailSerializer
+    OrderDetailSerializer, AssignOrderSerializer
 from .permissions import IsCustomer, IsWorker
 
 CUSTOMER_ROLE_NAME = "customer"
@@ -43,6 +43,26 @@ class ShowOrderDetailsView(generics.RetrieveAPIView):
     # def get_queryset(self):
     #     queryset = Order.objects.filter(order_status=1)
     #     return queryset
+
+
+class AssignOrderView(generics.UpdateAPIView):
+    queryset = Order.objects.all()
+    serializer_class = AssignOrderSerializer
+    permission_classes = [permissions.IsAuthenticated, IsWorker]
+    lookup_field = 'number'
+
+    def partial_update(self, request, *args, **kwargs):
+        instance = self.get_object()
+
+        if instance.worker:
+            return Response({"detail": "Для этого заказа уже назначен исполнитель."}, status=status.HTTP_400_BAD_REQUEST)
+
+        instance.worker = request.user
+        instance.order_status = OrderStatus.objects.get(pk=2)
+        self.perform_update(instance)
+        serializer = self.get_serializer(instance)
+
+        return Response(serializer.data)
 
 
 class OrderViewSet(viewsets.ModelViewSet):
