@@ -56,9 +56,12 @@ class AssignOrderView(generics.UpdateAPIView):
 
         if instance.worker:
             return Response({"detail": "Для этого заказа уже назначен исполнитель."}, status=status.HTTP_400_BAD_REQUEST)
-
         instance.worker = request.user
-        instance.order_status = OrderStatus.objects.get(pk=2)
+
+        try:
+            instance.order_status = OrderStatus.objects.get(pk=2)
+        except Exception as e:
+            return Response({"detail": f"Ошибка изменения статуса заказа: {e}"}, status=status.HTTP_400_BAD_REQUEST)
         self.perform_update(instance)
         serializer = self.get_serializer(instance)
 
