@@ -34,19 +34,15 @@ class OrderStatusViewSet(viewsets.ModelViewSet):
 
 
 class ShowOrderDetailsView(generics.RetrieveAPIView):
-    # queryset = Order.objects.all()
+    queryset = Order.objects.all()
     serializer_class = OrderDetailSerializer
     permission_classes = [permissions.IsAuthenticated, IsWorker]
     lookup_field = 'number'
 
-    def get_queryset(self):
-        queryset = Order.objects.filter(order_status=1)
-        return queryset
-
+    # опционально - фильтрация запроса при обращении в базу
     # def get_queryset(self):
-    #     order_number = self.kwargs.get("order_number")
-    #     print(order_number)
-    #     return Order.objects.get(number=order_number)
+    #     queryset = Order.objects.filter(order_status=1)
+    #     return queryset
 
 
 class OrderViewSet(viewsets.ModelViewSet):
