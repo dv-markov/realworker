@@ -81,19 +81,19 @@ class OrderDetailSerializer(serializers.ModelSerializer):
     specialization = serializers.CharField(source='specialization.name')
     qualification = serializers.CharField(source='qualification.name')
     customer = serializers.CharField(source='customer.name')
-    worker = serializers.SerializerMethodField()
-    orderStatus = serializers.CharField(source='order_status.name')
+    # worker = serializers.SerializerMethodField()
+    # orderStatus = serializers.CharField(source='order_status.name')
 
     class Meta:
         model = Order
         fields = ["address", "dateTime", "category", "specialization", "qualification", "description",
-                  "price", "customer", "worker", "orderStatus"]
+                  "price", "customer"]
 
-    @staticmethod
-    def get_worker(obj):
-        worker = obj.worker
-        if worker:
-            return worker.name
+    # @staticmethod
+    # def get_worker(obj):
+    #     worker = obj.worker
+    #     if worker:
+    #         return worker.name
 
 
 class CreateOrderSerializer(serializers.ModelSerializer):
