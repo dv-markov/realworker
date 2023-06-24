@@ -97,19 +97,16 @@ class MyOrderListView(generics.ListAPIView):
 
 class OpenOrderListView(generics.ListAPIView):
     queryset = Order.objects.filter(worker=None)
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, IsWorker]
     serializer_class = OpenOrderSerializer
 
-    # def get_serializer_class(self):
+    # возврат пустого словаря, если проверка на роль не проходит
+    # заменено на permission_class IsWorker
+    # def get(self, request, *args, **kwargs):
     #     user = self.request.user
     #     if user.role.name == WORKER_ROLE_NAME:
-    #         return OpenOrderSerializer
-
-    def get(self, request, *args, **kwargs):
-        user = self.request.user
-        if user.role.name == WORKER_ROLE_NAME:
-            return super().get(request, *args, **kwargs)
-        return Response({})
+    #         return super().get(request, *args, **kwargs)
+    #     return Response({})
 
 
 # class CreateOrderView(generics.CreateAPIView):
