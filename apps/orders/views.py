@@ -68,6 +68,71 @@ class AssignOrderView(generics.UpdateAPIView):
         return Response(serializer.data)
 
 
+class ChangeOrderStatusView(generics.UpdateAPIView):
+    queryset = Order.objects.all()
+    serializer_class = AssignOrderSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    lookup_field = 'number'
+
+    def partial_update(self, request, *args, **kwargs):
+        def bad_request(err_text=None):
+            err_text = err_text or ''
+            return Response({"detail": f"Некорректно указан статус заказа, {err_text}"},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        def not_authorized():
+            return Response({"detail": "Недостаточно прав пользователя для выполнения операции"},
+                            status=status.HTTP_401_UNAUTHORIZED)
+
+        instance = self.get_object()
+        current_user = request.user
+        new_order_status = None
+        try:
+            new_order_status = request.data.get('orderStatus')
+        except Exception as e:
+            return bad_request(e)
+        print(f"instance = {instance}",
+              f"instance.order_status.pk = {instance.order_status.pk}",
+              f"instance.worker = {instance.worker}",
+              f"instance.customer = {instance.customer}",
+              f"current_user = {current_user}",
+              f"current_user.role.name = {current_user.role.name}",
+              f"new_order_status = {new_order_status}",
+              sep='\n')
+
+        match new_order_status:
+            case "2":  # Назначен исполнитель
+                if instance.order_status.pk != 1 or current_user.role.name != WORKER_ROLE_NAME:
+                    return not_authorized()
+                if instance.worker:
+                    return Response({"detail": "Для этого заказа уже назначен исполнитель."},
+                                    status=status.HTTP_400_BAD_REQUEST)
+                instance.worker = current_user
+            case "3":  # Исполнитель приехал
+                if instance.order_status.pk != 2 or instance.worker != current_user:
+                    return not_authorized()
+            case "4":  # Исполнитель работает
+                if instance.order_status.pk != 3 or instance.customer != current_user:
+                    return not_authorized()
+            case "5":  # Заказ выполнен
+                if instance.order_status.pk != 4 or instance.customer != current_user:
+                    return not_authorized()
+            case "6":  # Заказ закрыт заказчиком
+                if instance.customer != current_user:
+                    return not_authorized()
+            case _:
+                return bad_request(f"статус '{new_order_status}' не может быть установлен")
+
+        try:
+            instance.order_status = OrderStatus.objects.get(pk=int(new_order_status))
+        except Exception as e:
+            return Response({"detail": f"Ошибка изменения статуса заказа: {e}"}, status=status.HTTP_400_BAD_REQUEST)
+
+        self.perform_update(instance)
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
+
+
 class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all().order_by('pk')
     serializer_class = OrderSerializer

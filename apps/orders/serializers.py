@@ -215,7 +215,7 @@ class OrderSerializer(serializers.ModelSerializer):
     geoLon = serializers.CharField(source='geo_lon', required=False)
     dateTime = serializers.CharField(source='date_time', required=False)
     # address = serializers.CharField(source='address.__str__')
-    orderStatus = serializers.CharField(source='order_status.name', required=False)
+    orderStatus = serializers.CharField(source='order_status.name')
     # orderStatus = serializers.CharField(source='order_status.name')
 
     class Meta:
