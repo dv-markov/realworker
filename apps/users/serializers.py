@@ -70,6 +70,10 @@ class GeoDataSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class CustomerDetailsSerializer(serializers.ModelSerializer):
+    pass
+
+
 class UserProfileSerializer(serializers.ModelSerializer):
     country = serializers.StringRelatedField()
     specializations = serializers.StringRelatedField(many=True)
