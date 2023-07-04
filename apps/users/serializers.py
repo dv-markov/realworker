@@ -109,6 +109,14 @@ class CustomerDetailSerializer(serializers.ModelSerializer):
         model = UserProfile
         fields = ["name", "middleName", "surname", "city", "company", "position", "email", "phone"]
 
+    def update(self, instance, validated_data):
+        user_data = validated_data.pop('user', None)
+        if user_data:
+            for key, value in user_data.items():
+                setattr(instance.user, key, value)
+        instance.user.save()
+        return super().update(instance, validated_data)
+
 
 class WorkerDetailSerializer(serializers.ModelSerializer):
     name = serializers.CharField(source='user.name')
@@ -119,3 +127,11 @@ class WorkerDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
         fields = ["name", "middleName", "surname", "city", "email", "phone"]
+
+    def update(self, instance, validated_data):
+        user_data = validated_data.pop('user', None)
+        if user_data:
+            for key, value in user_data.items():
+                setattr(instance.user, key, value)
+        instance.user.save()
+        return super().update(instance, validated_data)
