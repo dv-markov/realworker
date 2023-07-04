@@ -70,10 +70,6 @@ class GeoDataSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class CustomerDetailsSerializer(serializers.ModelSerializer):
-    pass
-
-
 class UserProfileSerializer(serializers.ModelSerializer):
     country = serializers.StringRelatedField()
     specializations = serializers.StringRelatedField(many=True)
@@ -101,3 +97,14 @@ class UserProfileSerializer(serializers.ModelSerializer):
         data['qualifications'] = [qual.name for qual in instance.qualifications.all()]
         data = flatten_json(data, flatten_lists=False)
         return data
+
+
+class CustomerDetailSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(source='user.name')
+    city = serializers.CharField(source='user.city')
+    email = serializers.CharField(source='user.email')
+    phone = serializers.CharField(source='user.username')
+
+    class Meta:
+        model = UserProfile
+        fields = ["name", "middleName", "surname", "city", "position", "email", "phone"]

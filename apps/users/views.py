@@ -6,9 +6,14 @@ from rest_framework.response import Response
 from rest_framework import permissions
 from rest_framework import generics
 from .serializers import RoleSerializer, UserSerializer, CountrySerializer, CitySerializer, CategorySerializer, \
-    SpecializationSerializer, QualificationSerializer, GeoDataSerializer, UserProfileSerializer
+    SpecializationSerializer, QualificationSerializer, GeoDataSerializer, UserProfileSerializer, \
+    CustomerDetailSerializer
 
 from .models import CustomUser, Country, City, Category, Specialization, Qualification, GeoData, UserProfile
+
+
+CUSTOMER_ROLE_NAME = "customer"
+WORKER_ROLE_NAME = "worker"
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -72,6 +77,7 @@ class GeoDataViewSet(viewsets.ModelViewSet):
 class UserProfileView(generics.ListAPIView):
     # queryset = UserProfile.objects.all()
     serializer_class = UserProfileSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
         current_user = self.request.user
@@ -79,4 +85,13 @@ class UserProfileView(generics.ListAPIView):
         return UserProfile.objects.filter(user=current_user)
         # return UserProfile.objects.get(user__username=current_user)
 
+
+class UserDetailsView(generics.RetrieveAPIView):
     permission_classes = [permissions.IsAuthenticated]
+
+    def get_serializer_class(self):
+        user = self.request.user
+        if user.role.name == CUSTOMER_ROLE_NAME:
+            return CustomerDetailSerializer
+        # elif user.role.name == WORKER_ROLE_NAME:
+        #     return WorkerOrderSerializer
