@@ -34,7 +34,7 @@ urlpatterns = [
     path("api/orders/", include("apps.orders.urls")),
 
     # ссылка на дополнительные модели приложения users
-    path("api/etc/", include("apps.users.urls")),
+    path("api/users/", include("apps.users.urls")),
 
     # admin access
     path('api/admin/', admin.site.urls),

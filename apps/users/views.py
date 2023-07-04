@@ -7,7 +7,7 @@ from rest_framework import permissions
 from rest_framework import generics
 from .serializers import RoleSerializer, UserSerializer, CountrySerializer, CitySerializer, CategorySerializer, \
     SpecializationSerializer, QualificationSerializer, GeoDataSerializer, UserProfileSerializer, \
-    CustomerDetailSerializer
+    CustomerDetailSerializer, WorkerDetailSerializer
 
 from .models import CustomUser, Country, City, Category, Specialization, Qualification, GeoData, UserProfile
 
@@ -93,5 +93,9 @@ class UserDetailsView(generics.RetrieveAPIView):
         user = self.request.user
         if user.role.name == CUSTOMER_ROLE_NAME:
             return CustomerDetailSerializer
-        # elif user.role.name == WORKER_ROLE_NAME:
-        #     return WorkerOrderSerializer
+        elif user.role.name == WORKER_ROLE_NAME:
+            return WorkerDetailSerializer
+
+    def get_object(self):
+        current_user = self.request.user
+        return UserProfile.objects.get(user=current_user)

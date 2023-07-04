@@ -107,4 +107,15 @@ class CustomerDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserProfile
-        fields = ["name", "middleName", "surname", "city", "position", "email", "phone"]
+        fields = ["name", "middleName", "surname", "city", "company", "position", "email", "phone"]
+
+
+class WorkerDetailSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(source='user.name')
+    city = serializers.CharField(source='user.city')
+    email = serializers.CharField(source='user.email')
+    phone = serializers.CharField(source='user.username')
+
+    class Meta:
+        model = UserProfile
+        fields = ["name", "middleName", "surname", "city", "email", "phone"]

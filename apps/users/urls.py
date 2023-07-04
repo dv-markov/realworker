@@ -14,5 +14,6 @@ router.register(r'geodatas', views.GeoDataViewSet)
 
 urlpatterns = [
     path("user-name-role/", views.RoleView.as_view(), name="user-name-role"),
+    path("details/", views.UserDetailsView.as_view(), name="user-details"),
     path("", include(router.urls)),
 ]
