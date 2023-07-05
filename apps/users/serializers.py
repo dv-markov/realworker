@@ -101,7 +101,6 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
 class CustomerDetailSerializer(serializers.ModelSerializer):
     name = serializers.CharField(source='user.name')
-    # city = serializers.CharField(source='user.city')
     city = serializers.PrimaryKeyRelatedField(queryset=City.objects.all(), source='user.city')
     email = serializers.CharField(source='user.email')
     phone = serializers.CharField(source='user.username')
@@ -126,7 +125,7 @@ class CustomerDetailSerializer(serializers.ModelSerializer):
 
 class WorkerDetailSerializer(serializers.ModelSerializer):
     name = serializers.CharField(source='user.name')
-    city = serializers.CharField(source='user.city')
+    city = serializers.PrimaryKeyRelatedField(queryset=City.objects.all(), source='user.city')
     email = serializers.CharField(source='user.email')
     phone = serializers.CharField(source='user.username')
 
@@ -141,3 +140,8 @@ class WorkerDetailSerializer(serializers.ModelSerializer):
                 setattr(instance.user, key, value)
         instance.user.save()
         return super().update(instance, validated_data)
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data['city'] = instance.user.city.name
+        return data
