@@ -188,6 +188,7 @@ class OrderSerializer(serializers.ModelSerializer):
             data['worker'] = instance.worker.name
         return data
 
+    # Присвоение нового номера заказа прописано в модели
     # def create(self, validated_data):
     #     current_year = datetime.datetime.now().year % 100
     #     max_order = Order.objects.order_by('-number').first()

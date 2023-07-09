@@ -15,6 +15,5 @@ urlpatterns = [
     path("details/<str:number>/", views.ShowOrderDetailsView.as_view(), name="order-details"),
     path("assign/<str:number>/", views.AssignOrderView.as_view(), name="assign-order"),
     path("change-status/<str:number>/", views.ChangeOrderStatusView.as_view(), name="change-order-status"),
-    # path("create-order/", views.CreateOrderView.as_view(), name="create-order"),
     path("", include(router.urls)),
 ]

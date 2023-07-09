@@ -1,5 +1,3 @@
-import datetime
-from django.shortcuts import render
 from rest_framework import generics, viewsets
 from rest_framework import permissions
 from rest_framework.response import Response
@@ -7,7 +5,7 @@ from rest_framework import status
 from rest_framework.decorators import action
 from .models import File, Chat, OrderStatus, Order
 from .serializers import FileSerializer, ChatSerializer, OrderStatusSerializer, OrderSerializer, \
-    CustomerOrderSerializer, WorkerOrderSerializer, OpenOrderSerializer, CreateOrderSerializer, OrderCreateSerializer, \
+    CustomerOrderSerializer, WorkerOrderSerializer, OpenOrderSerializer, OrderCreateSerializer, \
     OrderDetailSerializer, AssignOrderSerializer
 from .permissions import IsCustomer, IsWorker
 
@@ -147,6 +145,7 @@ class OrderViewSet(viewsets.ModelViewSet):
             return Response(order_serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    # Присвоение нового номера заказа прописано в модели
     # def perform_create(self, serializer):
     #     current_year = datetime.datetime.now().year % 100
     #     max_order = Order.objects.order_by('-number').first()
@@ -188,8 +187,3 @@ class OpenOrderListView(generics.ListAPIView):
     #     if user.role.name == WORKER_ROLE_NAME:
     #         return super().get(request, *args, **kwargs)
     #     return Response({})
-
-
-# class CreateOrderView(generics.CreateAPIView):
-#     serializer_class = CreateOrderSerializer
-#     permission_classes = [permissions.IsAuthenticated]
