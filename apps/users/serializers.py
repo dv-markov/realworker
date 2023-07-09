@@ -41,9 +41,11 @@ class CountrySerializer(serializers.ModelSerializer):
 
 
 class CitySerializer(serializers.ModelSerializer):
+    countryId = serializers.CharField(source="country.id")
+
     class Meta:
         model = City
-        fields = "__all__"
+        fields = ['id', 'name', 'countryId']
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -53,15 +55,19 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class SpecializationSerializer(serializers.ModelSerializer):
+    categoryId = serializers.CharField(source="category.id")
+
     class Meta:
         model = Specialization
-        fields = "__all__"
+        fields = ['id', 'name', 'categoryId']
 
 
 class QualificationSerializer(serializers.ModelSerializer):
+    specializationId = serializers.CharField(source="specialization.id")
+
     class Meta:
         model = Qualification
-        fields = "__all__"
+        fields = ['id', 'name', 'price', 'specializationId']
 
 
 class GeoDataSerializer(serializers.ModelSerializer):
