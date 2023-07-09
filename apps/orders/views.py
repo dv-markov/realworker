@@ -38,9 +38,9 @@ class ShowOrderDetailsView(generics.RetrieveAPIView):
     lookup_field = 'number'
 
     # опционально - фильтрация запроса при обращении в базу
-    # def get_queryset(self):
-    #     queryset = Order.objects.filter(order_status=1)
-    #     return queryset
+    def get_queryset(self):
+        queryset = Order.objects.filter(order_status=1)
+        return queryset
 
 
 class AssignOrderView(generics.UpdateAPIView):
@@ -50,16 +50,16 @@ class AssignOrderView(generics.UpdateAPIView):
     lookup_field = 'number'
 
     def partial_update(self, request, *args, **kwargs):
-        instance = self.get_object()
-        if instance.worker:
+        order = self.get_object()
+        if order.worker:
             return Response({"detail": "Для этого заказа уже назначен исполнитель."},
                             status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
         try:
-            instance.worker = request.user
-            instance.order_status = OrderStatus.objects.get(pk=2)
-            self.perform_update(instance)
-            serializer = self.get_serializer(instance)
+            order.worker = request.user
+            order.order_status = OrderStatus.objects.get(pk=2)
+            self.perform_update(order)
+            serializer = self.get_serializer(order)
         except Exception as e:
             return Response({"detail": f"Ошибка изменения статуса заказа: {e}"},
                             status=status.HTTP_422_UNPROCESSABLE_ENTITY)
@@ -92,13 +92,13 @@ class ChangeOrderStatusView(generics.UpdateAPIView):
             return rise_bad_request(e)
 
         match new_order_status:
-            case "Назначен исполнитель":  # 2
-                if instance.order_status.pk != 1 or current_user.role.name != WORKER_ROLE_NAME:
-                    return rise_status_error(new_order_status)
-                if instance.worker:
-                    return Response({"detail": "Для этого заказа уже назначен исполнитель."},
-                                    status=status.HTTP_422_UNPROCESSABLE_ENTITY)
-                instance.worker = current_user
+            # case "Назначен исполнитель":  # 2
+            #     if instance.order_status.pk != 1 or current_user.role.name != WORKER_ROLE_NAME:
+            #         return rise_status_error(new_order_status)
+            #     if instance.worker:
+            #         return Response({"detail": "Для этого заказа уже назначен исполнитель."},
+            #                         status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+            #     instance.worker = current_user
             case "Исполнитель приехал":  # 3
                 if instance.order_status.pk != 2 or instance.worker != current_user:
                     return rise_status_error(new_order_status)
@@ -119,9 +119,25 @@ class ChangeOrderStatusView(generics.UpdateAPIView):
             self.perform_update(instance)
             serializer = self.get_serializer(instance)
         except Exception as e:
-            return Response({"detail": f"Ошибка изменения статуса заказа: {e}"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"detail": f"Ошибка изменения статуса заказа: {e}"},
+                            status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
         return Response(serializer.data)
+
+
+class RemoveWorkerFromOrderView(generics.UpdateAPIView):
+    queryset = Order.objects.all()
+    serializer_class = AssignOrderSerializer
+    permission_classes = [permissions.IsAuthenticated, IsWorker]
+    lookup_field = 'number'
+
+    def patch(self, request, *args, **kwargs):
+        current_user = request.user
+        order = self.get_object()
+        if order.worker != current_user:
+            return Response({"detail": f"Нельзя отменить заказ другого пользователя"})
+
+
 
 
 class OrderViewSet(viewsets.ModelViewSet):
