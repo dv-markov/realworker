@@ -83,7 +83,7 @@ class ChangeOrderStatusView(generics.UpdateAPIView):
 
         def rise_status_error(status_err_text=None):
             status_err_text = status_err_text or ''
-            return Response({"detail": f"Статус {status_err_text} не может быть установлен для данного заказа"},
+            return Response({"detail": f"Статус '{status_err_text}' не может быть установлен для данного заказа"},
                             status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
         try:
