@@ -121,5 +121,4 @@ class UserProfileUpdateView(generics.UpdateAPIView):
         serializer = self.get_serializer(instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
-        # return self.retrieve(request, *args, **kwargs)
         return Response(serializer.data)
