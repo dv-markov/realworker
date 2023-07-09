@@ -41,7 +41,7 @@ class CountrySerializer(serializers.ModelSerializer):
 
 
 class CitySerializer(serializers.ModelSerializer):
-    countryId = serializers.CharField(source="country.id")
+    countryId = serializers.IntegerField(source="country.id")
 
     class Meta:
         model = City
@@ -55,7 +55,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class SpecializationSerializer(serializers.ModelSerializer):
-    categoryId = serializers.CharField(source="category.id")
+    categoryId = serializers.IntegerField(source="category.id")
 
     class Meta:
         model = Specialization
@@ -63,7 +63,7 @@ class SpecializationSerializer(serializers.ModelSerializer):
 
 
 class QualificationSerializer(serializers.ModelSerializer):
-    specializationId = serializers.CharField(source="specialization.id")
+    specializationId = serializers.IntegerField(source="specialization.id")
 
     class Meta:
         model = Qualification
