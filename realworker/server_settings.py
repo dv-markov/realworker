@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'apps.users.apps.UsersConfig',  # регистрация приложения users
     'apps.orders.apps.OrdersConfig',  # регистрация приложения orders
+    'apps.notifications.apps.NotificationsConfig',  # регистрация приложения notifications
     'rest_framework',
     'rest_framework.authtoken',
     'djoser',

@@ -159,7 +159,7 @@ class OrderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        fields = [# "id",
+        fields = ["id",
                   "number",
                   "category",
                   "specialization",

@@ -30,7 +30,10 @@ router.register(r'users', views.UserViewSet)
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
-    # ссылка на модели приложения orders
+    # ссылка на адреса приложения notifications
+    path("api/notifications/", include("apps.notifications.urls")),
+
+    # ссылка на адреса приложения orders
     path("api/orders/", include("apps.orders.urls")),
 
     # ссылка на дополнительные модели приложения users
