@@ -53,17 +53,18 @@ class AssignOrderView(generics.UpdateAPIView):
 
     def partial_update(self, request, *args, **kwargs):
         instance = self.get_object()
-
         if instance.worker:
-            return Response({"detail": "Для этого заказа уже назначен исполнитель."}, status=status.HTTP_400_BAD_REQUEST)
-        instance.worker = request.user
+            return Response({"detail": "Для этого заказа уже назначен исполнитель."},
+                            status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
         try:
+            instance.worker = request.user
             instance.order_status = OrderStatus.objects.get(pk=2)
+            self.perform_update(instance)
+            serializer = self.get_serializer(instance)
         except Exception as e:
-            return Response({"detail": f"Ошибка изменения статуса заказа: {e}"}, status=status.HTTP_400_BAD_REQUEST)
-        self.perform_update(instance)
-        serializer = self.get_serializer(instance)
+            return Response({"detail": f"Ошибка изменения статуса заказа: {e}"},
+                            status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
         return Response(serializer.data)
 
@@ -75,68 +76,53 @@ class ChangeOrderStatusView(generics.UpdateAPIView):
     lookup_field = 'number'
 
     def partial_update(self, request, *args, **kwargs):
-        def bad_request(err_text=None):
+        def rise_bad_request(err_text=None):
             err_text = err_text or ''
             return Response({"detail": f"Некорректно указан статус заказа, {err_text}"},
                             status=status.HTTP_400_BAD_REQUEST)
 
-        def not_authorized():
-            return Response({"detail": "Недостаточно прав пользователя для выполнения операции"},
-                            status=status.HTTP_401_UNAUTHORIZED)
+        def rise_status_error(status_err_text=None):
+            status_err_text = status_err_text or ''
+            return Response({"detail": f"Статус {status_err_text} не может быть установлен для данного заказа"},
+                            status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
-        instance = self.get_object()
-        current_user = request.user
-        new_order_status = None
         try:
+            instance = self.get_object()
+            current_user = request.user
             new_order_status = request.data.get('orderStatus')
         except Exception as e:
-            return bad_request(e)
-        print(f"instance = {instance}",
-              f"instance.order_status.pk = {instance.order_status.pk}",
-              f"instance.worker = {instance.worker}",
-              f"instance.customer = {instance.customer}",
-              f"current_user = {current_user}",
-              f"current_user.role.name = {current_user.role.name}",
-              f"new_order_status = {new_order_status}",
-              sep='\n')
+            return rise_bad_request(e)
 
         match new_order_status:
-            # case "2":  # Назначен исполнитель
-            case "Назначен исполнитель":  # Назначен исполнитель
-
+            case "Назначен исполнитель":  # 2
                 if instance.order_status.pk != 1 or current_user.role.name != WORKER_ROLE_NAME:
-                    return not_authorized()
+                    return rise_status_error(new_order_status)
                 if instance.worker:
                     return Response({"detail": "Для этого заказа уже назначен исполнитель."},
-                                    status=status.HTTP_400_BAD_REQUEST)
+                                    status=status.HTTP_422_UNPROCESSABLE_ENTITY)
                 instance.worker = current_user
-            # case "3":  # Исполнитель приехал
-            case "Исполнитель приехал":  # Исполнитель приехал
+            case "Исполнитель приехал":  # 3
                 if instance.order_status.pk != 2 or instance.worker != current_user:
-                    return not_authorized()
-            # case "4":  # Исполнитель работает
-            case "Исполнитель работает":  # Исполнитель работает
+                    return rise_status_error(new_order_status)
+            case "Исполнитель работает":  # 4
                 if instance.order_status.pk != 3 or instance.customer != current_user:
-                    return not_authorized()
-            # case "5":  # Заказ выполнен
-            case "Заказ выполнен":  # Заказ выполнен
+                    return rise_status_error(new_order_status)
+            case "Заказ выполнен":  # 5
                 if instance.order_status.pk != 4 or instance.customer != current_user:
-                    return not_authorized()
-            # case "6":  # Заказ закрыт заказчиком
-            case "Заказ закрыт заказчиком":  # Заказ закрыт заказчиком
+                    return rise_status_error(new_order_status)
+            case "Заказ закрыт заказчиком":  # 6
                 if instance.customer != current_user:
-                    return not_authorized()
+                    return rise_status_error(new_order_status)
             case _:
-                return bad_request(f"статус '{new_order_status}' не может быть установлен")
+                return rise_bad_request(f"статус '{new_order_status}' не может быть установлен")
 
         try:
-            # instance.order_status = OrderStatus.objects.get(pk=int(new_order_status))
             instance.order_status = OrderStatus.objects.get(name=new_order_status)
+            self.perform_update(instance)
+            serializer = self.get_serializer(instance)
         except Exception as e:
             return Response({"detail": f"Ошибка изменения статуса заказа: {e}"}, status=status.HTTP_400_BAD_REQUEST)
 
-        self.perform_update(instance)
-        serializer = self.get_serializer(instance)
         return Response(serializer.data)
 
 
