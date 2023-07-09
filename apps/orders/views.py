@@ -101,30 +101,37 @@ class ChangeOrderStatusView(generics.UpdateAPIView):
               sep='\n')
 
         match new_order_status:
-            case "2":  # Назначен исполнитель
+            # case "2":  # Назначен исполнитель
+            case "Назначен исполнитель":  # Назначен исполнитель
+
                 if instance.order_status.pk != 1 or current_user.role.name != WORKER_ROLE_NAME:
                     return not_authorized()
                 if instance.worker:
                     return Response({"detail": "Для этого заказа уже назначен исполнитель."},
                                     status=status.HTTP_400_BAD_REQUEST)
                 instance.worker = current_user
-            case "3":  # Исполнитель приехал
+            # case "3":  # Исполнитель приехал
+            case "Исполнитель приехал":  # Исполнитель приехал
                 if instance.order_status.pk != 2 or instance.worker != current_user:
                     return not_authorized()
-            case "4":  # Исполнитель работает
+            # case "4":  # Исполнитель работает
+            case "Исполнитель работает":  # Исполнитель работает
                 if instance.order_status.pk != 3 or instance.customer != current_user:
                     return not_authorized()
-            case "5":  # Заказ выполнен
+            # case "5":  # Заказ выполнен
+            case "Заказ выполнен":  # Заказ выполнен
                 if instance.order_status.pk != 4 or instance.customer != current_user:
                     return not_authorized()
-            case "6":  # Заказ закрыт заказчиком
+            # case "6":  # Заказ закрыт заказчиком
+            case "Заказ закрыт заказчиком":  # Заказ закрыт заказчиком
                 if instance.customer != current_user:
                     return not_authorized()
             case _:
                 return bad_request(f"статус '{new_order_status}' не может быть установлен")
 
         try:
-            instance.order_status = OrderStatus.objects.get(pk=int(new_order_status))
+            # instance.order_status = OrderStatus.objects.get(pk=int(new_order_status))
+            instance.order_status = OrderStatus.objects.get(name=new_order_status)
         except Exception as e:
             return Response({"detail": f"Ошибка изменения статуса заказа: {e}"}, status=status.HTTP_400_BAD_REQUEST)
 
