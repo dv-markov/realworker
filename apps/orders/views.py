@@ -136,11 +136,15 @@ class RemoveWorkerFromOrderView(generics.UpdateAPIView):
         order = self.get_object()
         if order.worker != current_user:
             return Response({"detail": f"Нельзя отменить заказ другого пользователя"})
-        order.worker = None
-        self.perform_update(order)
-
-
-
+        try:
+            order.worker = None
+            order.order_status = OrderStatus.objects.get(pk=1)
+            self.perform_update(order)
+            serializer = self.get_serializer(order)
+        except Exception as e:
+            return Response({"detail": f"Ошибка изменения статуса заказа: {e}"},
+                            status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+        return Response(serializer.data)
 
 
 class OrderViewSet(viewsets.ModelViewSet):
