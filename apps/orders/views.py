@@ -9,6 +9,7 @@ from .serializers import FileSerializer, ChatSerializer, OrderStatusSerializer, 
     OrderDetailSerializer, AssignOrderSerializer
 from .permissions import IsCustomer, IsWorker
 
+
 CUSTOMER_ROLE_NAME = "customer"
 WORKER_ROLE_NAME = "worker"
 

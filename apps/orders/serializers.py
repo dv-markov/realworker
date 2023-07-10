@@ -34,7 +34,6 @@ class CustomerOrderSerializer(serializers.ModelSerializer):
         fields = ["number", "description", "address", "category", "specialization", "qualification", "worker",
                   "dateTime", "orderStatus"]
 
-    @staticmethod
     def get_worker(self, obj):
         worker = obj.worker
         if worker is not None:
@@ -99,8 +98,7 @@ class AssignOrderSerializer(serializers.ModelSerializer):
         fields = ["address", "dateTime", "category", "specialization", "qualification", "description",
                   "price", "customer", "worker", "orderStatus"]
 
-    @staticmethod
-    def get_worker(obj):
+    def get_worker(self, obj):
         worker = obj.worker
         if worker:
             return worker.name
